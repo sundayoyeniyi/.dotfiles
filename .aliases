@@ -1,0 +1,19 @@
+#
+# Aliases dotfile
+#
+# Easier navigation on the terminal with cd: .., ..., ...., .....
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+
+# Easier files & directory listings
+
+# git aliases
+alias g="git"
+
+# Homebrew aliases
+
+# Homebrew Cask aliases
+
+
