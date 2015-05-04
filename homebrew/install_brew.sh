@@ -23,8 +23,15 @@ if test ! $(which brew)
 
 # brew cask install robomongo
 # brew cask install sequelpro
+# brew cask install mysqlworkbench
+# brew cask install pgadmin III
 # brew cask install virtualbox
+# brew cask install vagrant
 # brew cask install github
-# brew cask install box / dropbox
+# brew cask install box-sync
+# brew cask install dropbox
+# brew cask install sublime-text
+# brew cask install iterm2
+# brew cask install keepassx
 
 exit 0
