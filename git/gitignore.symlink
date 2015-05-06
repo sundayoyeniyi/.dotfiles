@@ -1,0 +1,5 @@
+# global git ignore file
+
+node_modules
+
+logs
