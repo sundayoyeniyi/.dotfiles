@@ -9,22 +9,30 @@ if test ! $(which brew)
 	fi
 
 # check brew cask exist
-
-# TODO 
+	# TODO
+	# install cask
+		# brew install caskroom/cask/brew-cask
 
 # Installing homebrew packages
 
 # brew install mongodb
 # brew install mysql
-# brew install nodejs
+# brew install node
 # brew install postgresql
+# brew install wget
+
+# taps for Drush
+# brew tap homebrew/dupes
+# brew tap homebrew/versions
+# brew tap homebrew/php
+# brew install drush
 
 # Installing brew cask packages
 
 # brew cask install robomongo
 # brew cask install sequelpro
 # brew cask install mysqlworkbench
-# brew cask install pgadmin III
+# brew cask install pgadmin3
 # brew cask install virtualbox
 # brew cask install vagrant
 # brew cask install github
