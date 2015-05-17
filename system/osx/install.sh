@@ -41,5 +41,6 @@ if test ! $(which brew)
 # brew cask install sublime-text
 # brew cask install iterm2
 # brew cask install keepassx
+# brew cask install visual-studio-code
 
 exit 0
