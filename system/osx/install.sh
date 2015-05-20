@@ -21,11 +21,15 @@ if test ! $(which brew)
 # brew install postgresql
 # brew install wget
 
-# taps for Drush
+# #taps for Drush
 # brew tap homebrew/dupes
 # brew tap homebrew/versions
 # brew tap homebrew/php
 # brew install drush
+
+# Pandoc for document conversions
+
+# brew install pandoc
 
 # Installing brew cask packages
 
