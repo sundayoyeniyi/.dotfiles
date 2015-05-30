@@ -1,29 +1,29 @@
-# Settings for vim 
+" Settings for vim 
 
-# File type and Syntax Highlighting
+" File type and Syntax Highlighting
 filetype on
 filetype plugin on
 syntax on
    
-# autoindent
+" autoindent
 set autoindent
 
-# Tabs space
+" Tabs space
 set shiftwidth=4
 set softtabstop=4
 
-# English spellchecking when needed
+" English spellchecking when needed
 if version >= 700
    set spl=en spell
    set nospell
 endif
 
-# tab completion
+" tab completion
 set wildmenu
 set wildmode=list:longest,full
 
-# Mouse support in console
+" Mouse support in console
 set mouse=a
 
-# Line Numbers PWN!
+" Line Numbers PWN!
 set number
