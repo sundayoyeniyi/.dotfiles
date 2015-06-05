@@ -27,3 +27,6 @@ set mouse=a
 
 " Line Numbers PWN!
 set number
+
+" Highlight search results
+set hlsearch
