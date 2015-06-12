@@ -21,11 +21,8 @@ if test ! $(which brew)
 # brew install postgresql
 # brew install wget
 
-<<<<<<< HEAD
 # taps & install for Drush
-=======
 # #taps for Drush
->>>>>>> origin/master
 # brew tap homebrew/dupes
 # brew tap homebrew/versions
 # brew tap homebrew/php
@@ -50,6 +47,7 @@ if test ! $(which brew)
 # brew cask install iterm2
 # brew cask install keepassx
 # brew cask install visual-studio-code
+# brew cask install evernote
 
 # R & R dependencies + RStudio (Data science and quantitative analysis)
 # brew tap homebrew/science
