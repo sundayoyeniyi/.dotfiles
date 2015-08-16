@@ -49,6 +49,8 @@ if test ! $(which brew)
 # brew cask install visual-studio-code
 # brew cask install evernote
 # brew cask install todoist
+# brew cask install teamviewer
+# brew cask install skype
 
 # R & R dependencies + RStudio (Data science and quantitative analysis)
 # brew tap homebrew/science
