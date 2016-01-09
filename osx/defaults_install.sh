@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#! /usr/local/bin/zsh
 #
 # Setting defaults for OS X
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#! /usr/local/bin/zsh
 #
 #  Mac App Store software updates
 
