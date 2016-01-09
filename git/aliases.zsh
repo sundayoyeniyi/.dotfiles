@@ -1,5 +1,6 @@
-# git aliases
+#!/usr/bin/env bash
 #
+# git aliases
 
 alias gi='git init'
 alias gcl='git clone'

@@ -2,7 +2,5 @@
 # Things I don't want in public repo
 #
 
-git/gitconfig.symlink
-
 # Don't check in backup of existing dotfiles
 backup

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+#
 # brew aliases
 
 alias bd='brew doctor'

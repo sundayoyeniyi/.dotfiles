@@ -1,5 +1,8 @@
-# global git ignore file
+# global git ignore files & folder
 
 node_modules
-
+bower_components
 logs
+.DS_store
+*.swp
+.sass-cache
