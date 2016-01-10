@@ -1,9 +1,9 @@
-#! /usr/local/bin/zsh
+#! /bin/bash
 #
 # switchshell.sh
 if test $(which zsh)
 	then
-        chsh -s $(which zsh)
+       sudo  chsh -s $(which zsh)
     else
         #TODO - install zsh
         echo "installing zsh....."

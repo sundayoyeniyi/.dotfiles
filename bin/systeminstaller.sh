@@ -1,4 +1,4 @@
-#! /usr/local/bin/zsh
+#! /bin/bash
 #
 # systeminstaller.sh
 
@@ -28,8 +28,8 @@ brew tap homebrew/versions
 brew install caskroom/cask/brew-cask
 
 # Installing homebrew packages
-brew install zsh
-brew install git
+#brew install zsh
+#brew install git
 brew install homebrew/versions/node4-lts
 brew cask install google-chrome
 #brew cask install firefox-developer-edition
@@ -38,7 +38,7 @@ brew cask install mysqlworkbench
 brew cask install pgadmin3
 brew cask install virtualbox
 brew cask install vagrant
-brew cask install github
+brew cask install github-desktop
 brew cask install iterm2
 brew cask install keepassx
 brew cask install visual-studio-code
@@ -61,7 +61,7 @@ brew cask install hipchat
 #
 DOTFILES_ROOT=$(pwd -P)
 DOTFILES_HOME=".dotfiles"
-for dotfilesymlink in $(find -H "$DOTFILES_ROOT" -maxdepth 2 -name '*.symlink' -not -path '*.git*')
+for dotfilesymlink in $(find -H "$DOTFILES_ROOT/$DOTFILES_HOME" -maxdepth 2 -name '*.symlink' -not -path '*.git*')
   do
     dotfile="$HOME/.$(basename "${dotfilesymlink%.*}")"
     ln -s -f -v "$dotfilesymlink" "$dotfile"
@@ -70,7 +70,7 @@ for dotfilesymlink in $(find -H "$DOTFILES_ROOT" -maxdepth 2 -name '*.symlink' -
 #
 #3. install all custom shell installers
 #
-for installers in $(find -H "$DOTFILES_ROOT/$DOTFILES_HOME" -maxdepth 2 -name '*_install.sh' -not -path '*.git*')
+for shellscripts in $(find -H "$DOTFILES_ROOT/$DOTFILES_HOME" -maxdepth 2 -name '*_install.sh' -not -path '*.git*')
   do
 	echo $shellscripts
 	$shellscripts
