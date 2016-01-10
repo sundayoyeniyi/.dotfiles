@@ -3,7 +3,7 @@
 # switchshell.sh
 if test $(which zsh)
 	then
-       sudo  chsh -s $(which zsh)
+       chsh -s $(which zsh)
     else
         #TODO - install zsh
         echo "installing zsh....."
