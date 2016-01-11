@@ -4,3 +4,4 @@
 
 # Don't check in backup of existing dotfiles
 backup
+proxy/proxy.zsh
