@@ -1,0 +1,19 @@
+
+PROXY_SERVER=X.X.X.X
+PROXY_PORT=YYYY
+PROXY_USERNAME=domain\username
+PROXY_PASSWORD=password
+PROXY=$PROXY_USERNAME:$PROXY_PASSWORD@$PROXY_SERVER:$PROXY_PORT
+#PROXY=$PROXY_SERVER:$PROXY_PORT
+
+export http_proxy=http://$PROXY
+export HTTP_PROXY=http://$PROXY
+export https_proxy=http://$PROXY
+export HTTPS_PROXY=http://$PROXY
+export vagrant_http_proxy=http://$PROXY
+export vagrant_https_proxy=http://$PROXY
+export VAGRANT_HTTP_PROXY=http://$PROXY
+export VAGRANT_HTTPS_PROXY=http://$PROXY
+
+export rsync_proxy=$PROXY
+export RSYNC_PROXY=$PROXY
