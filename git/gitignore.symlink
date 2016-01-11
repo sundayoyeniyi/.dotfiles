@@ -4,5 +4,8 @@ node_modules
 bower_components
 logs
 .DS_store
+Desktop.ini
+._*
+.Trashes
 *.swp
 .sass-cache
