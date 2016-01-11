@@ -2,9 +2,6 @@
 #
 # systemupdates.sh
 
-# Set OS X defaults
-$ZSH/osx/defaults_install.sh
-
 # Upgrade homebrew
 echo "› brew update"
 brew update

@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+#
+# proxy settings
 
 PROXY_SERVER=X.X.X.X
 PROXY_PORT=YYYY

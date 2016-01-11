@@ -16,6 +16,8 @@ This is the way I choose to organise the .dotfiles on my development machine and
 |2  | Restore .dotfiles from backup if you choose to | - [ ] to do |
 |3  | Adapt for use on a linux box | - [ ] to do |
 |4  | Improve README documentation | - [ ] to do |
+|5  | Enable/automate vscode user settings | - [ ] to do |
+|6  | Auto-install selected vscode plugins | - [ ] to do |
 
 ## Contributing
 
