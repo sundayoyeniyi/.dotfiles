@@ -1,9 +1,8 @@
-
 export ZSH=$HOME/.dotfiles
 
 # load all zsh files
 zsh_config_files=($ZSH/**/*.zsh)
 for file in ${zsh_config_files}
 do
-  source $file
+    source $file
 done
