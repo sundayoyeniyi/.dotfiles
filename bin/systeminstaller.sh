@@ -3,9 +3,6 @@
 # systeminstaller.sh
 
 # Install developer utilities and applications
-#
-# TODO
-# OSX - runs /system/osx/install.sh & defaults.sh & osxupdates.sh
 
 #1. install home brew and all packages
 #2. install all symlinks
@@ -44,17 +41,17 @@ brew cask install keepassx
 brew cask install visual-studio-code
 brew cask install evernote
 brew cask install hipchat
-# brew cask install skype
-# brew cask install teamviewer
+brew cask install skype
+brew cask install teamviewer
 # brew cask install box-sync
 # brew cask install dropbox
 # brew cask install sublime-text
 
 # R & R dependencies + RStudio (Data science and quantitative analysis)
-# brew tap homebrew/science
-# brew cask install xquartz
-# brew install r
-# brew cask install rstudio
+brew tap homebrew/science
+brew cask install xquartz
+brew install r
+brew cask install rstudio
 
 #
 #2. install all symlinks

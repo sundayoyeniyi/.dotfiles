@@ -4,6 +4,7 @@
 npm install -g eslint
 npm install -g tslint
 npm install -g typescript
+npm install -g tsd
 npm install -g gulp
 npm install -g mocha
 npm install -g node-inspector
