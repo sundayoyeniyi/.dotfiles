@@ -32,7 +32,6 @@ brew install caskroom/cask/brew-cask
 #brew install git
 brew install homebrew/versions/node4-lts
 brew cask install google-chrome
-#brew cask install firefox-developer-edition
 brew cask install robomongo
 brew cask install mysqlworkbench
 brew cask install pgadmin3
@@ -44,17 +43,6 @@ brew cask install keepassx
 brew cask install visual-studio-code
 brew cask install evernote
 brew cask install hipchat
-# brew cask install skype
-# brew cask install teamviewer
-# brew cask install box-sync
-# brew cask install dropbox
-# brew cask install sublime-text
-
-# R & R dependencies + RStudio (Data science and quantitative analysis)
-# brew tap homebrew/science
-# brew cask install xquartz
-# brew install r
-# brew cask install rstudio
 
 #
 #2. install all symlinks
