@@ -42,6 +42,7 @@ brew cask install visual-studio-code
 brew cask install evernote
 brew cask install skype
 brew cask install teamviewer
+brew cask install pixate-studio
 # brew cask install box-sync
 # brew cask install dropbox
 # brew cask install sublime-text
