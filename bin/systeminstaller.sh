@@ -40,7 +40,6 @@ brew cask install iterm2
 brew cask install keepassx
 brew cask install visual-studio-code
 brew cask install evernote
-brew cask install hipchat
 brew cask install skype
 brew cask install teamviewer
 # brew cask install box-sync
