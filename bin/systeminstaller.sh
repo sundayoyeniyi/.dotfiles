@@ -43,6 +43,7 @@ brew cask install keepassx
 brew cask install visual-studio-code
 brew cask install evernote
 brew cask install hipchat
+brew cask install tree
 
 #
 #2. install all symlinks
