@@ -2,7 +2,7 @@
 #
 # Setting prompt
 
-export PS1='M: %m U: %n T: %T P: %/
+export PS1='U: %n P: %/
 %# > '
 
 export RPS1='%w'
