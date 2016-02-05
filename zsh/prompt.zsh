@@ -10,5 +10,4 @@ autoload -Uz vcs_info
 export PS1='%B%F{2}[%F{1}%n%F{2}] %/
 %F{4}%#%F{2}-->%f%b '
 
-export RPS1='%w $(__git_ps1 "[%s]")'
-#TODO = change right prompt to state of git
+export RPS1='$(__git_ps1 "[%s]")'
