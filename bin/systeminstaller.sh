@@ -45,6 +45,7 @@ brew cask install evernote
 brew cask install hipchat
 brew cask install tree
 brew cask install libreoffice
+brew cask install sketch
 
 #
 #2. install all symlinks
