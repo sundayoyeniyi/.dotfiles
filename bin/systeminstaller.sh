@@ -40,8 +40,8 @@ brew cask install vagrant
 brew cask install github-desktop
 brew cask install iterm2
 brew cask install keepassx
-brew cask install visual-studio-code
-brew cask install evernote
+brew cask install visual-studio-code --force
+brew cask install evernote --force
 brew cask install hipchat
 brew cask install tree
 brew cask install libreoffice
