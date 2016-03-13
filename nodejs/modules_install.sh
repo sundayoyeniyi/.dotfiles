@@ -12,3 +12,4 @@ npm install -g node-inspector
 npm install -g bower
 npm install -g jasmine
 npm install -g karma-cli
+npm install -g npm
