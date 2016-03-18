@@ -13,5 +13,5 @@ npm install -g jasmine
 npm install -g karma-cli
 npm install -g npm
 npm install -g watch
-npm install -g babel
+npm install -g babel-cli
 npm install -g browserify
