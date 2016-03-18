@@ -4,7 +4,6 @@
 npm install -g eslint
 npm install -g tslint
 npm install -g typescript
-npm uninstall -g tsd
 npm install -g typings
 npm install -g gulp
 npm install -g mocha
@@ -14,3 +13,5 @@ npm install -g jasmine
 npm install -g karma-cli
 npm install -g npm
 npm install -g watch
+npm install -g babel
+npm install -g browserify
