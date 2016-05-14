@@ -21,6 +21,7 @@ if test ! $(which brew)
 
 # brew update
 brew update
+brew cleanup
 # tap homebrew versions repository
 brew tap homebrew/versions
 # install brew-cask
@@ -29,33 +30,33 @@ brew install caskroom/cask/brew-cask
 # Installing homebrew packages
 #brew install zsh
 #brew install git
-brew install homebrew/versions/node4-lts
+brew reinstall homebrew/versions/node4-lts --force
 brew cask install google-chrome
 #brew cask install firefox-developer-edition
-brew cask install robomongo
-brew cask install mysqlworkbench
-brew cask install pgadmin3
-brew cask install virtualbox
-brew cask install vagrant
-brew cask install github-desktop
-brew cask install iterm2
-brew cask install keepassx
-brew cask install visual-studio-code
-brew cask install evernote
-brew cask install skype
-brew cask install teamviewer
-brew cask install pixate-studio
-brew cask install libreoffice
-brew cask install sketch
-brew cask install heroku-toolbelt
+brew cask reinstall robomongo --force
+brew cask reinstall mysqlworkbench --force
+brew cask reinstall pgadmin3 --force
+brew cask reinstall virtualbox --force
+brew cask reinstall vagrant --force
+brew cask reinstall github-desktop --force
+brew cask reinstall iterm2
+brew cask reinstall keepassx --force
+brew cask reinstall visual-studio-code --force
+brew cask reinstall evernote --force
+brew cask reinstall skype --force
+brew cask reinstall teamviewer --force
+brew cask reinstall pixate-studio --force
+brew cask reinstall libreoffice --force
+brew cask reinstall sketch --force
+brew cask reinstall heroku-toolbelt --force
 # brew cask install box-sync
 # brew cask install dropbox
 
 # R & R dependencies + RStudio (Data science and quantitative analysis)
 brew tap homebrew/science
-brew cask install xquartz
-brew install r
-brew cask install rstudio
+brew cask reinstall xquartz --force
+brew reinstall r --force
+brew cask reinstall rstudio --force
 
 #
 #2. install all symlinks
