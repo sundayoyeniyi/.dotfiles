@@ -22,6 +22,7 @@ if test ! $(which brew)
 # brew update
 brew update
 brew cleanup
+brew cask cleanup
 # tap homebrew versions repository
 brew tap homebrew/versions
 # install brew-cask
@@ -33,30 +34,30 @@ brew install caskroom/cask/brew-cask
 brew reinstall homebrew/versions/node4-lts --force
 brew cask install google-chrome
 #brew cask install firefox-developer-edition
-brew cask reinstall robomongo --force
-brew cask reinstall mysqlworkbench --force
-brew cask reinstall pgadmin3 --force
-brew cask reinstall virtualbox --force
-brew cask reinstall vagrant --force
-brew cask reinstall github-desktop --force
-brew cask reinstall iterm2
-brew cask reinstall keepassx --force
-brew cask reinstall visual-studio-code --force
-brew cask reinstall evernote --force
-brew cask reinstall skype --force
-brew cask reinstall teamviewer --force
-brew cask reinstall pixate-studio --force
-brew cask reinstall libreoffice --force
-brew cask reinstall sketch --force
-brew cask reinstall heroku-toolbelt --force
+brew cask install robomongo
+brew cask install mysqlworkbench
+brew cask install pgadmin3
+brew cask uninstall --force virtualbox && brew cask install virtualbox
+brew cask uninstall --force vagrant && brew cask install vagrant
+brew cask install github-desktop
+brew cask install iterm2
+brew cask uninstall --force keepassx && brew cask install keepassx
+brew cask uninstall --force visual-studio-code && brew cask install visual-studio-code
+brew cask uninstall --force evernote && brew cask install evernote
+brew cask install skype
+brew cask install teamviewer
+brew cask install pixate-studio
+brew cask uninstall --force libreoffice && brew cask install libreoffice
+brew cask install sketch
+brew cask install heroku-toolbelt
 # brew cask install box-sync
 # brew cask install dropbox
 
 # R & R dependencies + RStudio (Data science and quantitative analysis)
 brew tap homebrew/science
-brew cask reinstall xquartz --force
+brew cask install xquartz
 brew reinstall r --force
-brew cask reinstall rstudio --force
+brew cask install rstudio
 
 #
 #2. install all symlinks
