@@ -38,16 +38,16 @@ brew cask install robomongo
 brew cask install mysqlworkbench
 brew cask install pgadmin3
 brew cask uninstall --force virtualbox && brew cask install virtualbox
-brew cask uninstall --force vagrant && brew cask install vagrant
+brew cask install vagrant
 brew cask install github-desktop
 brew cask install iterm2
-brew cask uninstall --force keepassx && brew cask install keepassx
+brew cask install keepassx
 brew cask uninstall --force visual-studio-code && brew cask install visual-studio-code
 brew cask uninstall --force evernote && brew cask install evernote
 brew cask install skype
 brew cask install teamviewer
 brew cask install pixate-studio
-brew cask uninstall --force libreoffice && brew cask install libreoffice
+brew cask install libreoffice
 brew cask install sketch
 brew cask install heroku-toolbelt
 # brew cask install box-sync
