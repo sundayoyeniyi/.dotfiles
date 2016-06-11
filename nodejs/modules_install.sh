@@ -16,4 +16,5 @@ npm install -g watch
 npm install -g babel-cli
 npm install -g browserify
 npm install -g express-generator
+npm install -g strongloop
 npm install -g angular-cli

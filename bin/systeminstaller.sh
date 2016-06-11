@@ -37,7 +37,7 @@ brew cask install google-chrome
 brew cask install robomongo
 brew cask install mysqlworkbench
 brew cask install pgadmin3
-brew cask uninstall --force virtualbox && brew cask install virtualbox
+brew cask install virtualbox
 brew cask install vagrant
 brew cask install github-desktop
 brew cask install iterm2
@@ -56,7 +56,7 @@ brew cask install heroku-toolbelt
 # R & R dependencies + RStudio (Data science and quantitative analysis)
 brew tap homebrew/science
 brew cask install xquartz
-brew reinstall r --force
+brew install r --force
 brew cask install rstudio
 
 #
