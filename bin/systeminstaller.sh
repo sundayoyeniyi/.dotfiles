@@ -56,7 +56,7 @@ brew cask install heroku-toolbelt
 # R & R dependencies + RStudio (Data science and quantitative analysis)
 brew tap homebrew/science
 brew cask install xquartz
-brew install r --force
+brew install r
 brew cask install rstudio
 
 #
