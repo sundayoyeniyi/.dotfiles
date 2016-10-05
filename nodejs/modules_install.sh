@@ -23,3 +23,4 @@ npm install -g browserify
 npm install -g express-generator
 npm install -g strongloop
 npm install -g angular-cli
+npm install -g browser-sync

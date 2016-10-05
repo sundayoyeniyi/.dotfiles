@@ -34,7 +34,6 @@ brew install caskroom/cask/brew-cask
 brew uninstall homebrew/versions/node4-lts --force
 brew install nvm
 brew cask install google-chrome
-#brew cask install firefox-developer-edition
 brew cask install robomongo
 brew cask install mysqlworkbench
 brew cask install pgadmin3

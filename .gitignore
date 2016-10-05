@@ -5,3 +5,4 @@
 # Don't check in backup of existing dotfiles
 backup
 proxy/proxy_install.zsh
+.DS_Store
