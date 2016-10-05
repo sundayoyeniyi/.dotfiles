@@ -1,5 +1,7 @@
 #! /bin/bash
 #
+# installing latest nodejs version
+nvm install 6.7.0
 # Global nodejs modules
 npm install -g eslint
 npm install -g tslint

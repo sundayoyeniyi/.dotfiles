@@ -26,11 +26,12 @@ if test ! $(which brew)
 brew tap homebrew/versions
 # install brew-cask
 brew install caskroom/cask/brew-cask
+brew install nvm
 
 # Installing homebrew packages
 #brew install zsh
 #brew install git
-brew install homebrew/versions/node4-lts
+brew uninstall homebrew/versions/node4-lts --force
 brew cask install google-chrome
 brew cask install robomongo
 brew cask install mysqlworkbench
