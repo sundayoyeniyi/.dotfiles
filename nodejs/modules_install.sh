@@ -8,6 +8,7 @@ nvm alias default 6.7.0
 npm install -g eslint
 npm install -g tslint
 npm install -g typescript
+npm install -g typings
 npm install -g gulp
 npm install -g mocha
 npm install -g node-inspector
