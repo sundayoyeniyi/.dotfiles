@@ -2,6 +2,8 @@
 #
 # installing latest nodejs version
 nvm install 6.7.0
+nvm use 6.7.0
+nvm alias default 6.7.0
 # Global nodejs modules
 npm install -g eslint
 npm install -g tslint
