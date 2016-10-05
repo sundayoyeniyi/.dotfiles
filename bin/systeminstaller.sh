@@ -31,7 +31,8 @@ brew install caskroom/cask/brew-cask
 # Installing homebrew packages
 #brew install zsh
 #brew install git
-brew reinstall homebrew/versions/node4-lts --force
+brew uninstall homebrew/versions/node4-lts --force
+brew install nvm
 brew cask install google-chrome
 #brew cask install firefox-developer-edition
 brew cask install robomongo
@@ -42,8 +43,8 @@ brew cask install vagrant
 brew cask install github-desktop
 brew cask install iterm2
 brew cask install keepassx
-brew cask uninstall --force visual-studio-code && brew cask install visual-studio-code
-brew cask uninstall --force evernote && brew cask install evernote
+brew cask install visual-studio-code
+brew cask install evernote
 brew cask install skype
 brew cask install teamviewer
 brew cask install pixate-studio
