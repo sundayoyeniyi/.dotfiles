@@ -79,4 +79,9 @@ for shellscripts in $(find -H "$DOTFILES_ROOT/$DOTFILES_HOME" -maxdepth 2 -name 
 	$shellscripts
   done
 
+#
+#4. source nvm so its available in scripts
+#
+. "$(brew --prefix nvm)/nvm.sh"
+
 exit 0
