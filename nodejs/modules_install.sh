@@ -14,3 +14,4 @@ npm install -g mocha
 npm install -g node-inspector
 npm install -g bower
 npm install -g browser-sync
+npm install -g yarn
