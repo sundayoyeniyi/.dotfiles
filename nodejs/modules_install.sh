@@ -7,8 +7,8 @@ nvm alias default 6.7.0
 
 # Global nodejs modules
 npm uninstall -g eslint
-npm install -g tslint
 npm install -g typescript
+npm install -g tslint
 npm install -g typings
 npm install -g gulp
 npm install -g mocha
@@ -24,3 +24,4 @@ npm install -g express-generator
 npm install -g strongloop
 npm install -g angular-cli
 npm install -g browser-sync
+npm install -g nodemon
