@@ -32,7 +32,8 @@ brew install caskroom/cask/brew-cask
 #brew install zsh
 #brew install git
 brew uninstall homebrew/versions/node4-lts --force
-brew install nvm
+brew install homebrew/versions/node6-lts 
+brew uninstall nvm
 brew cask install google-chrome
 brew cask install robomongo
 brew cask install mysqlworkbench
@@ -78,10 +79,5 @@ for shellscripts in $(find -H "$DOTFILES_ROOT/$DOTFILES_HOME" -maxdepth 2 -name 
 	echo $shellscripts
 	$shellscripts
   done
-
-#
-#4. source nvm so its available in scripts
-#
-. "$(brew --prefix nvm)/nvm.sh"
 
 exit 0
