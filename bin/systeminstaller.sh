@@ -31,13 +31,11 @@ brew install caskroom/cask/brew-cask
 # Installing homebrew packages
 #brew install zsh
 #brew install git
-brew uninstall homebrew/versions/node4-lts --force
-brew install homebrew/versions/node6-lts 
-brew uninstall nvm
+brew install homebrew/versions/node6-lts
 brew cask install google-chrome
 brew cask install robomongo
 brew cask install mysqlworkbench
-brew cask install pgadmin3
+brew cask install pgadmin4
 brew cask install virtualbox
 brew cask install vagrant
 brew cask install github-desktop
