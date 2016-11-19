@@ -30,7 +30,7 @@ brew install caskroom/cask/brew-cask
 
 # Installing homebrew packages
 #brew install zsh
-#brew install git
+brew install git
 brew install homebrew/versions/node6-lts
 brew cask install google-chrome
 brew cask install robomongo
