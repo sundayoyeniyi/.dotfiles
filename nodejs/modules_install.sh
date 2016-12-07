@@ -22,3 +22,5 @@ yarn global add strongloog
 yarn global add angular-cli
 yarn global add browser-sync
 yarn global add nodemon
+yarn global add pm2
+yarn global add istanbul
