@@ -49,6 +49,7 @@ brew cask install pixate-studio
 brew cask install libreoffice
 brew cask install sketch
 brew install heroku
+brew install awscli
 # brew cask install box-sync
 # brew cask install dropbox
 
