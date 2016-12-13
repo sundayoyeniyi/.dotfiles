@@ -47,7 +47,10 @@ brew cask install hipchat
 brew cask install tree
 brew cask install libreoffice
 brew cask install sketch
-
+brew tap homebrew/science
+brew cask install xquartz
+brew install r
+brew cask install rstudio
 #
 #2. install all symlinks
 #
