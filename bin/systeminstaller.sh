@@ -51,6 +51,7 @@ brew tap homebrew/science
 brew cask install xquartz
 brew install r
 brew cask install rstudio
+brew caski install java
 #
 #2. install all symlinks
 #
