@@ -51,6 +51,7 @@ brew cask install sketch
 brew install heroku
 brew install awscli
 brew cask install java
+brew install yarn
 # brew cask install box-sync
 # brew cask install dropbox
 
