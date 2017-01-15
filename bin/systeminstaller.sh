@@ -48,10 +48,12 @@ brew cask install teamviewer
 brew cask install pixate-studio
 brew cask install libreoffice
 brew cask install sketch
+brew cask install android-studio
 brew install heroku
 brew install awscli
 brew cask install java
 brew install yarn
+brew install ansible
 # brew cask install box-sync
 # brew cask install dropbox
 
