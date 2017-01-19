@@ -47,6 +47,7 @@ brew cask install hipchat
 brew cask install tree
 brew cask install libreoffice
 brew cask install sketch
+brew cask install grammarly
 brew tap homebrew/science
 brew cask install xquartz
 brew install r
