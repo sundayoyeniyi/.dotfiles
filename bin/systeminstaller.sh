@@ -48,6 +48,7 @@ brew cask install tree
 brew cask install libreoffice
 brew cask install sketch
 brew cask install grammarly
+brew cask install omnigraffle
 brew tap homebrew/science
 brew cask install xquartz
 brew install r
