@@ -49,6 +49,7 @@ brew cask install pixate-studio
 brew cask install libreoffice
 brew cask install sketch
 brew cask install android-studio
+brew cask install android-file-transfer
 brew install heroku
 brew install awscli
 brew cask install java
