@@ -50,6 +50,7 @@ brew cask install libreoffice
 brew cask install sketch
 brew cask install android-studio
 brew cask install android-file-transfer
+brew cask install dash
 brew install heroku
 brew install awscli
 brew cask install java
