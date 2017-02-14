@@ -52,6 +52,7 @@ brew cask install android-studio
 brew cask install android-file-transfer
 brew cask install dash
 brew cask install sqlitebrowser
+brew cask install whatsapp
 brew install heroku
 brew install awscli
 brew cask install java
