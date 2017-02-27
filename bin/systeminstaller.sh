@@ -23,8 +23,9 @@ if test ! $(which brew)
 brew update
 brew cleanup
 brew cask cleanup
-# tap homebrew versions repository
+# tap homebrew & cask versions repository
 brew tap homebrew/versions
+brew tap caskroom/versions
 # install brew-cask
 brew install caskroom/cask/brew-cask
 
@@ -53,6 +54,7 @@ brew cask install android-file-transfer
 brew cask install dash
 brew cask install sqlitebrowser
 brew cask install whatsapp
+brew cask install firefoxdeveloperedition
 brew install heroku
 brew install awscli
 brew cask install java
