@@ -19,7 +19,7 @@ yarn global add watch
 #yarn global add browserify
 yarn global add express-generator
 #yarn global add strongloog
-yarn global add angular-cli
+yarn global add @angular/cli
 yarn global add browser-sync
 yarn global add nodemon
 yarn global add pm2
