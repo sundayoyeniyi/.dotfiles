@@ -58,7 +58,6 @@ brew cask install firefoxdeveloperedition
 brew install heroku
 brew install awscli
 brew cask install java
-brew install yarn
 brew install ansible
 # brew cask install box-sync
 # brew cask install dropbox
