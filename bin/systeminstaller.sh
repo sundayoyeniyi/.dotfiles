@@ -46,7 +46,7 @@ brew cask install visual-studio-code
 brew cask install evernote
 brew cask install skype
 brew cask install teamviewer
-brew cask install pixate-studio
+brew cask install axure-rp
 brew cask install libreoffice
 brew cask install sketch
 brew cask install android-studio
