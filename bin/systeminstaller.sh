@@ -57,6 +57,7 @@ brew cask install whatsapp
 brew cask install firefoxdeveloperedition
 brew install heroku
 brew install awscli
+brew install aws-shell
 brew cask install java
 brew install ansible
 # brew cask install box-sync
