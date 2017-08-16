@@ -62,6 +62,7 @@ brew cask install java
 brew install ansible
 brew install maven
 brew install maven-shell
+brew install gradle
 # brew cask install box-sync
 # brew cask install dropbox
 
