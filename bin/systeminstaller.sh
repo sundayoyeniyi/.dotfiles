@@ -26,6 +26,7 @@ brew cask cleanup
 # tap homebrew & cask versions repository
 brew tap homebrew/versions
 brew tap caskroom/versions
+brew tap pivotal/tap
 # install brew-cask
 brew install caskroom/cask/brew-cask
 
@@ -63,6 +64,7 @@ brew install ansible
 brew install maven
 brew install maven-shell
 brew install gradle
+brew install springboot
 # brew cask install box-sync
 # brew cask install dropbox
 
