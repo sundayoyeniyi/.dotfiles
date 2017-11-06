@@ -7,3 +7,4 @@ backup
 proxy/proxy_install.zsh
 .DS_Store
 env.zsh
+.gradle
