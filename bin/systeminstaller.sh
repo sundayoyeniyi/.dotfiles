@@ -65,6 +65,7 @@ brew install maven
 brew install maven-shell
 brew install gradle
 brew install springboot
+brew cask install docker
 # brew cask install box-sync
 # brew cask install dropbox
 
