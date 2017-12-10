@@ -31,7 +31,8 @@ brew tap pivotal/tap
 brew install caskroom/cask/brew-cask
 
 # Installing homebrew packages
-#brew install zsh
+brew install zsh
+brew install zsh-completions
 brew install git
 brew install homebrew/versions/node6-lts
 brew cask install google-chrome
