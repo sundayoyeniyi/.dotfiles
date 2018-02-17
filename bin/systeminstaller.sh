@@ -34,7 +34,7 @@ brew install caskroom/cask/brew-cask
 brew install zsh
 brew install zsh-completions
 brew install git
-brew install homebrew/versions/node6-lts
+brew install node@8
 brew cask install google-chrome
 brew cask install robomongo
 brew cask install mysqlworkbench
@@ -48,27 +48,22 @@ brew cask install visual-studio-code
 brew cask install evernote
 brew cask install skype
 brew cask install teamviewer
-brew cask install axure-rp
-brew cask install libreoffice
-brew cask install sketch
-brew cask install android-studio
-brew cask install android-file-transfer
 brew cask install dash
 brew cask install sqlitebrowser
 brew cask install whatsapp
 brew cask install firefoxdeveloperedition
+brew cask install postman
 brew install heroku
 brew install awscli
 brew install aws-shell
-brew cask install java
+brew cask install java8
 brew install ansible
 brew install maven
 brew install maven-shell
 brew install gradle
 brew install springboot
+brew install yarn
 brew cask install docker
-# brew cask install box-sync
-# brew cask install dropbox
 
 # R & R dependencies + RStudio (Data science and quantitative analysis)
 brew tap homebrew/science
