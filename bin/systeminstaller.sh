@@ -39,8 +39,6 @@ brew cask install google-chrome
 brew cask install robomongo
 brew cask install mysqlworkbench
 brew cask install pgadmin4
-brew cask install virtualbox
-brew cask install vagrant
 brew cask install github-desktop
 brew cask install iterm2
 brew cask install keepassx
@@ -51,7 +49,6 @@ brew cask install teamviewer
 brew cask install dash
 brew cask install sqlitebrowser
 brew cask install whatsapp
-brew cask install firefoxdeveloperedition
 brew cask install postman
 brew install heroku
 brew install awscli
