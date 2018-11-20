@@ -36,9 +36,6 @@ brew install zsh-completions
 brew install git
 brew install node@8
 brew cask install google-chrome
-brew cask install robomongo
-brew cask install mysqlworkbench
-brew cask install pgadmin4
 brew cask install github-desktop
 brew cask install iterm2
 brew cask install keepassx
@@ -47,7 +44,6 @@ brew cask install evernote
 brew cask install skype
 brew cask install teamviewer
 brew cask install dash
-brew cask install sqlitebrowser
 brew cask install whatsapp
 brew cask install postman
 brew install heroku
@@ -61,6 +57,7 @@ brew install gradle
 brew install springboot
 brew install yarn
 brew cask install docker
+brew cask install dbeaver-community
 
 # R & R dependencies + RStudio (Data science and quantitative analysis)
 brew tap homebrew/science
