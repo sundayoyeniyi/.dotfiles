@@ -58,6 +58,7 @@ brew install springboot
 brew install yarn
 brew cask install docker
 brew cask install dbeaver-community
+brew cask install wireshark
 
 # R & R dependencies + RStudio (Data science and quantitative analysis)
 brew tap homebrew/science
