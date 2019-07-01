@@ -56,6 +56,7 @@ brew install maven-shell
 brew install gradle
 brew install springboot
 brew install yarn
+brew install jenv
 brew cask install docker
 brew cask install dbeaver-community
 brew cask install wireshark
