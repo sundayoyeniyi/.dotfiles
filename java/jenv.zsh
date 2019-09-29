@@ -4,3 +4,5 @@
 
 export PATH="$HOME/.jenv/bin:$PATH"
   eval "$(jenv init -)"
+
+jenv enable-plugin export
