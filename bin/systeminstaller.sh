@@ -41,7 +41,6 @@ brew cask install iterm2
 brew cask install keepassx
 brew cask install visual-studio-code
 brew cask install evernote
-brew cask install skype
 brew cask install teamviewer
 brew cask install dash
 brew cask install whatsapp
@@ -56,7 +55,6 @@ brew install maven-shell
 brew install gradle
 brew install springboot
 brew install yarn
-brew install jenv
 brew install hub
 brew cask install docker
 brew cask install dbeaver-community
@@ -65,8 +63,7 @@ brew cask install wireshark
 # R & R dependencies + RStudio (Data science and quantitative analysis)
 brew tap homebrew/science
 brew cask install xquartz
-brew install r
-brew cask install rstudio
+brew cask install anaconda
 
 #
 #2. install all symlinks
