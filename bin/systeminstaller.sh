@@ -48,6 +48,7 @@ brew cask install postman
 brew install heroku
 brew install awscli
 brew install aws-shell
+brew install doctl
 brew cask install java8
 brew install ansible
 brew install maven
