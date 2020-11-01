@@ -1,3 +1,4 @@
+#! /bin/zsh
 # bash/zsh git prompt support
 #
 # - This git prompt is a modification / customisation of http://git-prompt.sh/ - with thanks to Shawn O. Pearce.

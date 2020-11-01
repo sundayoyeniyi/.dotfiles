@@ -1,8 +1,9 @@
-#! /bin/bash
-#
-# Setting defaults for OS X
+#! /bin/zsh
 
-# This one will largely be influenced by https://mths.be/osx
-#
-
-xcode-select --install
+if test $(which zsh)
+  then
+    echo "Making ZSH default shell"
+    chsh -s $(which zsh)
+  else
+    echo "ZSH not yet installed"
+  fi

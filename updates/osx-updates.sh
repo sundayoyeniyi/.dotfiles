@@ -1,9 +1,4 @@
-#! /bin/bash
-#
-#  Mac App Store software updates
+#!/bin/zsh
 
-echo "› sudo softwareupdate -i -a"
-
+echo "> sudo softwareupdate -i -a"
 sudo softwareupdate -i -a
-
-echo " updates completed ..."

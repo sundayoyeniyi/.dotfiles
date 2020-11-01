@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/zsh
 #
 # Setting prompt
 # color codes

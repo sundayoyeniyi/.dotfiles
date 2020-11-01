@@ -1,11 +1,9 @@
-#! /bin/bash
-#
-# systemupdates.sh
+#! /bin/zsh
 
-# Upgrade homebrew
-echo "› brew update"
-brew update
+export ZSH=$HOME/.dotfiles
 
-#  Mac App Store software updates
-echo "› sudo softwareupdate -i -a"
-sudo softwareupdate -i -a
+update_files=($ZSH/updates/*.sh)
+for file in ${update_files}
+  do
+    $file
+  done

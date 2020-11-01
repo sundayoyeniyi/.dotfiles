@@ -1,12 +1,25 @@
-# global git ignore files & folder
+# global gitignore files and folder
 
-node_modules
-bower_components
-logs
-.DS_store
-Desktop.ini
+# OS generated files
+.DS_Store
+.DS_Store?
 ._*
+.Spotlight-V100
 .Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Temp files
 *.swp
+*~
+node_modules/
+bower_components/
+logs/
 .sass-cache
 .vagrant
+
+# Ignore eclipse project files
+/.project
+/.pydevproject

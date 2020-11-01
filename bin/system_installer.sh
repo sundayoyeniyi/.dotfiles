@@ -1,89 +1,76 @@
-#! /bin/bash
-#
-# systeminstaller.sh
+#!/bin/zsh
 
-# Install developer utilities and applications
+if ! command -v gcc >/dev/null; then
+  echo "Installing XCode command-line tools before installing Homebrew ..."
+  xcode-select --install
+fi
 
-#1. install home brew and all packages
-#2. install all symlinks
-#3. install all custom shell installers
-
-#
-#1. install homebrew and all packages
-#
-
-# check homebrew exists
 if test ! $(which brew)
-	then
-		echo "Installing Homebrew ....."
-		ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-	fi
+  then
+    echo "Installing Homebrew - package manager for mac"
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  fi
 
-# brew update
+upgrade_cask() {
+  cask="$1"
+  if ! brew list --cask --versions "$cask" &>/dev/null; then
+    brew cask install "$cask"
+  else
+    brew upgrade --cask "$cask"
+  fi
+}
+
+upgrade_formulae() {
+  formulae="$1"
+  if ! brew list --versions "$formulae" &>/dev/null; then
+    brew install "$formulae"
+  else
+    brew upgrade "$formulae"
+  fi
+}
+
 brew update
 brew cleanup
-brew cask cleanup
-# tap homebrew & cask versions repository
-brew tap homebrew/versions
-brew tap caskroom/versions
-brew tap pivotal/tap
-# install brew-cask
-brew install caskroom/cask/brew-cask
 
-# Installing homebrew packages
-brew install zsh
-brew install zsh-completions
-brew install git
-brew install node@8
-brew cask install google-chrome
-brew cask install github-desktop
-brew cask install iterm2
-brew cask install keepassx
-brew cask install visual-studio-code
-brew cask install evernote
-brew cask install teamviewer
-brew cask install dash
-brew cask install whatsapp
-brew cask install postman
-brew install heroku
-brew install awscli
-brew install aws-shell
-brew install doctl
-brew cask install java8
-brew install ansible
-brew install maven
-brew install maven-shell
-brew install gradle
-brew install springboot
-brew install yarn
-brew install hub
-brew cask install docker
-brew cask install dbeaver-community
-brew cask install wireshark
+brew tap adoptopenjdk/openjdk
 
-# R & R dependencies + RStudio (Data science and quantitative analysis)
-brew tap homebrew/science
-brew cask install xquartz
-brew cask install anaconda
+upgrade_formulae git
+upgrade_formulae gradle
+upgrade_formulae maven
+upgrade_formulae jenv
+upgrade_formulae nvm
+upgrade_formulae minikube
+upgrade_formulae kompose
+upgrade_formulae skaffold
 
-#
-#2. install all symlinks
-#
-DOTFILES_ROOT=$(pwd -P)
-DOTFILES_HOME=".dotfiles"
-for dotfilesymlink in $(find -H "$DOTFILES_ROOT/$DOTFILES_HOME" -maxdepth 2 -name '*.symlink' -not -path '*.git*')
-  do
-    dotfile="$HOME/.$(basename "${dotfilesymlink%.*}")"
-    ln -s -f -v "$dotfilesymlink" "$dotfile"
-  done
+upgrade_cask dash
+upgrade_cask firefox-developer-edition
+upgrade_cask iterm2
+upgrade_cask slack
+upgrade_cask dbeaver-community
+upgrade_cask google-chrome
+upgrade_cask kafka-tool
+upgrade_cask postman
+upgrade_cask docker
+upgrade_cask evernote
+upgrade_cask intellij-idea
+upgrade_cask virtualbox
+upgrade_cask zoomus
+upgrade_cask wireshark
+upgrade_cask gotomeeting
+upgrade_cask keepassx
+upgrade_cask adoptopenjdk8
+upgrade_cask adoptopenjdk9
+upgrade_cask adoptopenjdk10
+upgrade_cask adoptopenjdk11
+upgrade_cask adoptopenjdk12
+upgrade_cask adoptopenjdk13
+upgrade_cask adoptopenjdk14
+upgrade_cask adoptopenjdk15
 
-#
-#3. install all custom shell installers
-#
-for shellscripts in $(find -H "$DOTFILES_ROOT/$DOTFILES_HOME" -maxdepth 2 -name '*_install.sh' -not -path '*.git*')
-  do
-	echo $shellscripts
-	$shellscripts
-  done
+upgrade_formulae docker-completion
+upgrade_formulae docker-compose
+upgrade_formulae docker-compose-completion
+upgrade_formulae docker-machine
 
-exit 0
+brew cleanup

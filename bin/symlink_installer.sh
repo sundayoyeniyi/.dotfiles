@@ -1,10 +1,9 @@
-#! /bin/bash
-#
-# dotfilessymlinker.sh
+#!/bin/zsh
 
-# - creates a backup of all existing dotfiles from home directory
-# - symlinks all files with .symlink extensions in the repo
-#
-# TODO
-
-echo "TODO .... dotfilessymlinker.sh"
+export ZSH=$HOME/.dotfiles
+symlinks=($ZSH/symlinks/*.symlink)
+for symlink in ${symlinks}
+  do
+    dotfile="$HOME/.$(basename "${symlink%.*}")"
+    ln -s -f -v "$symlink" "$dotfile"
+  done
