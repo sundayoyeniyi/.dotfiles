@@ -1,5 +1,5 @@
 #!/bin/zsh
-#
+
 # setting options
 
 #changing directories

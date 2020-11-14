@@ -37,16 +37,28 @@ brew tap adoptopenjdk/openjdk
 upgrade_formulae git
 upgrade_formulae gradle
 upgrade_formulae maven
+upgrade_formulae maven-shell
 upgrade_formulae jenv
 upgrade_formulae nvm
+upgrade_formulae heroku
+upgrade_formulae doctl
+upgrade_formulae awscli
+upgrade_formulae aws-shell
+upgrade_formulae ansible
 upgrade_formulae minikube
 upgrade_formulae kompose
 upgrade_formulae skaffold
+upgrade_formulae hashicorp/tap/terraform
+#upgrade_formulae zsh
+#upgrade_formulae zsh-completions
 
 upgrade_cask dash
+upgrade_cask github
+upgrade_cask teamviewer
+upgrade_cask whatsapp
+upgrade_cask apache-directory-studio
 upgrade_cask firefox-developer-edition
 upgrade_cask iterm2
-upgrade_cask slack
 upgrade_cask dbeaver-community
 upgrade_cask google-chrome
 upgrade_cask kafka-tool
@@ -57,7 +69,6 @@ upgrade_cask intellij-idea
 upgrade_cask virtualbox
 upgrade_cask zoomus
 upgrade_cask wireshark
-upgrade_cask gotomeeting
 upgrade_cask keepassx
 upgrade_cask adoptopenjdk8
 upgrade_cask adoptopenjdk9
@@ -67,6 +78,7 @@ upgrade_cask adoptopenjdk12
 upgrade_cask adoptopenjdk13
 upgrade_cask adoptopenjdk14
 upgrade_cask adoptopenjdk15
+upgrade_cask anaconda
 
 upgrade_formulae docker-completion
 upgrade_formulae docker-compose
