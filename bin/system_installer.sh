@@ -70,6 +70,7 @@ upgrade_cask virtualbox
 upgrade_cask zoomus
 upgrade_cask wireshark
 upgrade_cask keepassx
+upgrade_cask adobe-acrobat-reader
 upgrade_cask adoptopenjdk8
 upgrade_cask adoptopenjdk9
 upgrade_cask adoptopenjdk10
