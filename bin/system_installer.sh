@@ -80,6 +80,7 @@ upgrade_cask adoptopenjdk13
 upgrade_cask adoptopenjdk14
 upgrade_cask adoptopenjdk15
 upgrade_cask anaconda
+upgrade_cask lens
 
 upgrade_formulae docker-completion
 upgrade_formulae docker-compose
