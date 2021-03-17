@@ -46,6 +46,8 @@ upgrade_formulae awscli
 upgrade_formulae aws-shell
 upgrade_formulae ansible
 upgrade_formulae minikube
+upgrade_formulae kubernetes-cli
+upgrade_formulae helm
 upgrade_formulae kompose
 upgrade_formulae skaffold
 upgrade_formulae hashicorp/tap/terraform
