@@ -81,6 +81,7 @@ upgrade_cask adoptopenjdk12
 upgrade_cask adoptopenjdk13
 upgrade_cask adoptopenjdk14
 upgrade_cask adoptopenjdk15
+upgrade_cask adoptopenjdk16
 upgrade_cask anaconda
 upgrade_cask lens
 
