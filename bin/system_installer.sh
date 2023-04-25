@@ -51,6 +51,7 @@ upgrade_formulae helm
 upgrade_formulae kompose
 upgrade_formulae skaffold
 upgrade_formulae hashicorp/tap/terraform
+upgrade_formulae kind
 #upgrade_formulae zsh
 #upgrade_formulae zsh-completions
 
@@ -84,6 +85,7 @@ upgrade_cask adoptopenjdk15
 upgrade_cask adoptopenjdk16
 upgrade_cask anaconda
 upgrade_cask lens
+upgrade_cask microsoft-edge
 
 upgrade_formulae docker-completion
 upgrade_formulae docker-compose
