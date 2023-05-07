@@ -26,3 +26,10 @@ alias gplm='git pull origin master'
 alias gplgm='git pull github master'
 alias gphm='git push origin master'
 alias gphgm='git push github master'
+
+#gradlew aliases
+alias gcb='./gradlew clean build'
+alias gab='./gradlew application:bootRun'
+alias gstart='./gradlew startserver'
+alias grestart='./gradlew restartserver'
+alias gstop='./gradlew stopserver'
