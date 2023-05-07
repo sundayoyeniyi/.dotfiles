@@ -26,6 +26,7 @@ alias gplm='git pull origin master'
 alias gplgm='git pull github master'
 alias gphm='git push origin master'
 alias gphgm='git push github master'
+alias grv='git remote -v'
 
 #gradlew aliases
 alias gcb='./gradlew clean build'
