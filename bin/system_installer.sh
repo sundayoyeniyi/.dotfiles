@@ -33,6 +33,7 @@ brew update
 brew cleanup
 
 brew tap adoptopenjdk/openjdk
+brew tap homebrew/cask-versions
 
 upgrade_formulae git
 upgrade_formulae gradle
@@ -83,6 +84,7 @@ upgrade_cask adoptopenjdk13
 upgrade_cask adoptopenjdk14
 upgrade_cask adoptopenjdk15
 upgrade_cask adoptopenjdk16
+upgrade_cask temurin17
 upgrade_cask anaconda
 upgrade_cask lens
 upgrade_cask microsoft-edge
