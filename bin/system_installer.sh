@@ -5,7 +5,7 @@ if ! command -v gcc >/dev/null; then
   xcode-select --install
 fi
 
-if ! command -v brew &> /dev/null; then
+if command -v brew &> /dev/null; then
     echo "Installing Homebrew - package manager for mac"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     echo >> ~/.zprofile
