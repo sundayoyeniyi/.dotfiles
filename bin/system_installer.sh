@@ -64,8 +64,8 @@ upgrade_cask evernote
 upgrade_cask intellij-idea
 upgrade_cask zoom
 upgrade_cask wireshark
-upgrade_cask corretto17
-upgrade_cask corretto21
+upgrade_cask corretto@17
+upgrade_cask corretto@21
 upgrade_cask anaconda
 upgrade_cask microsoft-edge
 
