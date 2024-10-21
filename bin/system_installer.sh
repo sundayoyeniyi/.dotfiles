@@ -23,12 +23,30 @@ upgrade_cask() {
   fi
 }
 
+remove_cask() {
+  cask="$1"
+  if brew list --cask --versions "$cask" &>/dev/null; then
+    brew uninstall "$cask" --cask
+  else
+    echo "Cask $cask not installed and can't be removed"
+  fi
+}
+
 upgrade_formulae() {
   formulae="$1"
   if ! brew list --versions "$formulae" &>/dev/null; then
     brew install "$formulae"
   else
     brew upgrade "$formulae"
+  fi
+}
+
+remove_formulae() {
+  formulae="$1"
+  if brew list --versions "$formulae" &>/dev/null; then
+    brew uninstall "$formulae"
+  else
+    echo "Formulae $formulae not installed and can't be removed"
   fi
 }
 
@@ -54,7 +72,6 @@ upgrade_cask dash
 upgrade_cask github
 upgrade_cask teamviewer
 upgrade_cask whatsapp
-upgrade_cask apache-directory-studio
 upgrade_cask iterm2
 upgrade_cask dbeaver-community
 upgrade_cask google-chrome
@@ -68,6 +85,8 @@ upgrade_cask corretto@17
 upgrade_cask corretto@21
 upgrade_cask anaconda
 upgrade_cask microsoft-edge
+
+remove_cask apache-directory-studio
 
 upgrade_formulae docker-completion
 upgrade_formulae docker-compose
