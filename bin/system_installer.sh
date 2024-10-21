@@ -7,7 +7,7 @@ fi
 
 if ! command -v brew &> /dev/null; then
     echo "Installing Homebrew - package manager for mac"
-    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 upgrade_cask() {
