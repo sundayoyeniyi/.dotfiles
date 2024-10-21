@@ -17,9 +17,9 @@ fi
 upgrade_cask() {
   cask="$1"
   if ! brew list --cask --versions "$cask" &>/dev/null; then
-    brew cask install "$cask"
+    brew install "$cask" --cask
   else
-    brew upgrade --cask "$cask"
+    brew upgrade "$cask" --cask
   fi
 }
 
