@@ -5,11 +5,10 @@ if ! command -v gcc >/dev/null; then
   xcode-select --install
 fi
 
-if test ! $(which brew)
-  then
+if ! command -v brew &> /dev/null; then
     echo "Installing Homebrew - package manager for mac"
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  fi
+fi
 
 upgrade_cask() {
   cask="$1"
