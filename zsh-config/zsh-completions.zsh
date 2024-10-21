@@ -1,3 +1,3 @@
 #!/bin/zsh
 # enabling ZSH completions
-fpath=(/usr/local/share/zsh-completions $fpath)
+fpath+=("/opt/homebrew/share/zsh/site-functions")

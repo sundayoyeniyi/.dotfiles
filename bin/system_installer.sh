@@ -32,7 +32,6 @@ upgrade_formulae() {
 brew update
 brew cleanup
 
-brew tap adoptopenjdk/openjdk
 brew tap homebrew/cask-versions
 
 upgrade_formulae git
@@ -41,57 +40,43 @@ upgrade_formulae maven
 upgrade_formulae maven-shell
 upgrade_formulae jenv
 upgrade_formulae nvm
-upgrade_formulae heroku
-upgrade_formulae doctl
-upgrade_formulae awscli
-upgrade_formulae aws-shell
-upgrade_formulae ansible
-upgrade_formulae minikube
-upgrade_formulae kubernetes-cli
-upgrade_formulae helm
-upgrade_formulae kompose
-upgrade_formulae skaffold
-upgrade_formulae hashicorp/tap/terraform
+#upgrade_formulae heroku
+#upgrade_formulae kubernetes-cli
+#upgrade_formulae helm
 upgrade_formulae kind
-#upgrade_formulae zsh
-#upgrade_formulae zsh-completions
+upgrade_formulae zsh
+upgrade_formulae zsh-completions
 
 upgrade_cask dash
 upgrade_cask github
 upgrade_cask teamviewer
 upgrade_cask whatsapp
 upgrade_cask apache-directory-studio
-upgrade_cask firefox-developer-edition
 upgrade_cask iterm2
 upgrade_cask dbeaver-community
 upgrade_cask google-chrome
-upgrade_cask kafka-tool
 upgrade_cask postman
 upgrade_cask docker
 upgrade_cask evernote
 upgrade_cask intellij-idea
-upgrade_cask virtualbox
-upgrade_cask zoomus
+upgrade_cask zoom
 upgrade_cask wireshark
-upgrade_cask keepassx
-upgrade_cask adobe-acrobat-reader
-upgrade_cask adoptopenjdk8
-upgrade_cask adoptopenjdk9
-upgrade_cask adoptopenjdk10
-upgrade_cask adoptopenjdk11
-upgrade_cask adoptopenjdk12
-upgrade_cask adoptopenjdk13
-upgrade_cask adoptopenjdk14
-upgrade_cask adoptopenjdk15
-upgrade_cask adoptopenjdk16
-upgrade_cask temurin17
+upgrade_cask corretto17
+upgrade_cask corretto21
 upgrade_cask anaconda
-upgrade_cask lens
 upgrade_cask microsoft-edge
 
 upgrade_formulae docker-completion
 upgrade_formulae docker-compose
-upgrade_formulae docker-compose-completion
 upgrade_formulae docker-machine
 
 brew cleanup
+
+echo "> Post-install steps for managing non-brew installations"
+export ZSH=$HOME/.dotfiles
+
+post_install_files=($(ls $ZSH/post-install/*.sh | sort))
+for file in "${post_install_files[@]}"
+do
+  $file
+done

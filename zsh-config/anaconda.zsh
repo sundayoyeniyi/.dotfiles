@@ -1,3 +1,3 @@
 #! /bin/zsh
 
-export PATH=/usr/local/anaconda3/bin:$PATH
+export PATH="/opt/homebrew/anaconda3/bin:$PATH"
