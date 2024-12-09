@@ -85,6 +85,7 @@ upgrade_cask corretto@17
 upgrade_cask corretto@21
 upgrade_cask anaconda
 upgrade_cask microsoft-edge
+upgrade_cask microsoft-teams
 
 remove_cask apache-directory-studio
 
