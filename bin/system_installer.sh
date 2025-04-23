@@ -60,6 +60,7 @@ upgrade_formulae gradle
 upgrade_formulae maven
 upgrade_formulae maven-shell
 upgrade_formulae jenv
+upgrade_formulae node
 upgrade_formulae nvm
 #upgrade_formulae heroku
 #upgrade_formulae kubernetes-cli
