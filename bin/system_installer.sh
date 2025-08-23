@@ -68,6 +68,7 @@ upgrade_formulae nvm
 upgrade_formulae kind
 upgrade_formulae zsh
 upgrade_formulae zsh-completions
+upgrade_formulae qpdf
 
 upgrade_cask dash
 upgrade_cask github
