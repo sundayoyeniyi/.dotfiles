@@ -50,6 +50,27 @@ remove_formulae() {
   fi
 }
 
+upgrade_npm_package() {
+  package="$1"
+  if ! npm list -g --depth=0 "$package" &>/dev/null; then
+    echo "Installing global npm package: $package"
+    npm install -g "$package"
+  else
+    echo "Upgrading global npm package: $package"
+    npm update -g "$package"
+  fi
+}
+
+remove_npm_package() {
+  package="$1"
+  if npm list -g --depth=0 "$package" &>/dev/null; then
+    echo "Removing global npm package: $package"
+    npm uninstall -g "$package"
+  else
+    echo "Package $package not installed and can't be removed"
+  fi
+}
+
 brew update
 brew cleanup
 
@@ -91,6 +112,8 @@ upgrade_cask microsoft-edge
 upgrade_cask microsoft-teams
 upgrade_cask visual-studio-code
 upgrade_cask visual-studio-code@insiders
+upgrade_cask chatgpt-atlas
+upgrade_cask codex
 
 remove_cask apache-directory-studio
 
@@ -99,6 +122,14 @@ upgrade_formulae docker-compose
 upgrade_formulae docker-machine
 
 brew cleanup
+
+echo "> Managing global npm packages"
+# Add your global node packages here
+# Example packages - uncomment and modify as needed:
+# upgrade_npm_package typescript
+upgrade_npm_package @github/copilot
+upgrade_npm_package @openai/codex
+
 
 echo "> Post-install steps for managing non-brew installations"
 export ZSH=$HOME/.dotfiles
