@@ -34,3 +34,7 @@ alias gab='./gradlew application:bootRun'
 alias gstart='./gradlew startserver'
 alias grestart='./gradlew restartserver'
 alias gstop='./gradlew stopserver'
+
+#IDE aliases
+alias vs='code .'
+alias cx='codex'
