@@ -114,6 +114,8 @@ upgrade_cask visual-studio-code
 upgrade_cask visual-studio-code@insiders
 upgrade_cask chatgpt-atlas
 upgrade_cask codex
+upgrade_cask codex-app
+upgrade_cask redis-insight
 
 remove_cask apache-directory-studio
 
