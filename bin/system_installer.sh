@@ -91,6 +91,10 @@ upgrade_formulae zsh
 upgrade_formulae zsh-completions
 upgrade_formulae qpdf
 upgrade_formulae uv
+upgrade_formulae docker-completion
+upgrade_formulae docker-compose
+upgrade_formulae docker-machine
+upgrade_formulae mkcert
 
 upgrade_cask dash
 upgrade_cask github
@@ -118,10 +122,6 @@ upgrade_cask codex-app
 upgrade_cask redis-insight
 
 remove_cask apache-directory-studio
-
-upgrade_formulae docker-completion
-upgrade_formulae docker-compose
-upgrade_formulae docker-machine
 
 brew cleanup
 
