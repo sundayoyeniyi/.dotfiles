@@ -75,6 +75,7 @@ brew update
 brew cleanup
 
 brew tap homebrew/cask-versions
+brew tap hashicorp/tap
 
 upgrade_formulae git
 upgrade_formulae gradle
@@ -87,10 +88,19 @@ upgrade_formulae nvm
 #upgrade_formulae kubernetes-cli
 #upgrade_formulae helm
 upgrade_formulae kind
+upgrade_formulae hashicorp/tap/terraform
+upgrade_formulae tflint
 upgrade_formulae zsh
 upgrade_formulae zsh-completions
 upgrade_formulae qpdf
 upgrade_formulae uv
+upgrade_formulae awscli
+upgrade_formulae jq
+upgrade_formulae curl
+upgrade_formulae aiven-client
+upgrade_formulae doctl
+upgrade_formulae heroku/brew/heroku
+upgrade_formulae gh
 upgrade_formulae docker-completion
 upgrade_formulae docker-compose
 upgrade_formulae docker-machine
