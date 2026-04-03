@@ -48,7 +48,6 @@ CASKS=(
   temurin@25
   anaconda
   microsoft-teams
-  visual-studio-code
   chatgpt-atlas
   codex-app
   redis-insight
@@ -64,7 +63,6 @@ REMOVED_CASKS=(
   corretto@17
   corretto@21
   dash
-  visual-studio-code@insiders
 )
 
 GLOBAL_NPM_PACKAGES=(
@@ -76,6 +74,8 @@ MANUAL_CASKS=(
   docker
   microsoft-edge
   teamviewer
+  visual-studio-code
+  visual-studio-code@insiders
   wireshark
 )
 

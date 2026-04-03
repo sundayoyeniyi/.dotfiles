@@ -9,6 +9,7 @@ This runbook is the operator checklist for keeping the local machine aligned to 
 - `docker` is currently treated as a manual app because the active Homebrew cask is failing validation
 - `microsoft-edge` is currently treated as a manual app because the active Homebrew cask upgrade is conflicting with the installed app bundle
 - `teamviewer` is currently treated as a manual app because the active Homebrew cask is failing validation
+- `visual-studio-code` and `visual-studio-code@insiders` are currently treated as manual apps because the active Homebrew casks are failing validation
 - `wireshark` is currently treated as a manual app because the active Homebrew cask is failing validation
 
 ## 1. Preflight
@@ -92,6 +93,7 @@ codex --version
 - [ ] If you use Docker Desktop, confirm it still launches and self-updates outside Homebrew.
 - [ ] If you use Microsoft Edge, confirm it still launches and self-updates outside Homebrew.
 - [ ] If you use TeamViewer, confirm it still launches and self-updates outside Homebrew.
+- [ ] If you use Visual Studio Code or Insiders, confirm they still launch and self-update outside Homebrew.
 - [ ] If you use Wireshark, confirm it still launches and self-updates outside Homebrew.
 
 ## 6. Follow-Up Operations
