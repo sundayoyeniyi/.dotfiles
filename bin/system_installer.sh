@@ -115,7 +115,6 @@ ensure_homebrew() {
 
 prepare_homebrew() {
   brew update
-  brew tap homebrew/cask-versions
   brew tap hashicorp/tap
   brew tap aquasecurity/trivy
 }
