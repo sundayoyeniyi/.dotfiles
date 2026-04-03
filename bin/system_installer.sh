@@ -76,7 +76,9 @@ brew cleanup
 
 brew tap homebrew/cask-versions
 brew tap hashicorp/tap
+brew tap aquasecurity/trivy
 
+# Upgrade formulaes
 upgrade_formulae git
 upgrade_formulae gradle
 upgrade_formulae maven
@@ -105,7 +107,12 @@ upgrade_formulae docker-completion
 upgrade_formulae docker-compose
 upgrade_formulae docker-machine
 upgrade_formulae mkcert
+upgrade_formulae lefthook
+upgrade_formulae aquasecurity/trivy/trivy
+upgrade_formulae tfsec
+upgrade_formulae semgrep
 
+# Upgrade casks
 upgrade_cask dash
 upgrade_cask github
 upgrade_cask teamviewer
@@ -131,10 +138,7 @@ upgrade_cask codex
 upgrade_cask codex-app
 upgrade_cask redis-insight
 
-remove_cask apache-directory-studio
-
-brew cleanup
-
+# Post-install steps for managing global npm packages
 echo "> Managing global npm packages"
 # Add your global node packages here
 # Example packages - uncomment and modify as needed:
@@ -142,6 +146,12 @@ echo "> Managing global npm packages"
 upgrade_npm_package @github/copilot
 upgrade_npm_package @openai/codex
 
+
+# clean up old casks
+remove_cask apache-directory-studio
+
+# brew cleanups to remove old versions and free up space
+brew cleanup
 
 echo "> Post-install steps for managing non-brew installations"
 export ZSH=$HOME/.dotfiles
