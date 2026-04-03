@@ -35,7 +35,6 @@ FORMULAE=(
 
 CASKS=(
   github
-  teamviewer
   whatsapp
   iterm2
   dbeaver-community
@@ -74,6 +73,10 @@ REMOVED_CASKS=(
 GLOBAL_NPM_PACKAGES=(
   @github/copilot
   @openai/codex
+)
+
+MANUAL_CASKS=(
+  teamviewer
 )
 
 print_help() {
@@ -352,6 +355,13 @@ show_info() {
     fi
 
     print_remove_info "cask" "$cask" "$current"
+  done
+
+  echo
+  echo "Managed manually for now:"
+  for cask in "${MANUAL_CASKS[@]}"
+  do
+    printf "%-8s %-12s %-30s %s\n" "manual" "cask" "$cask" "Homebrew cask currently skipped"
   done
 
   echo
