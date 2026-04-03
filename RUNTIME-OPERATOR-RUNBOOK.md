@@ -6,6 +6,7 @@ This runbook is the operator checklist for keeping the local machine aligned to 
 - Node: `24` through `nvm`
 - Desktop app: `codex-app`
 - Global Node CLIs: installed against the NVM default runtime
+- `docker` is currently treated as a manual app because the active Homebrew cask is failing validation
 - `teamviewer` is currently treated as a manual app because the active Homebrew cask is failing validation
 
 ## 1. Preflight
@@ -86,6 +87,7 @@ codex --version
 
 - [ ] Confirm `@github/copilot` and `@openai/codex` are installed globally.
 - [ ] Confirm `codex-app` remains installed for desktop usage.
+- [ ] If you use Docker Desktop, confirm it still launches and self-updates outside Homebrew.
 - [ ] If you use TeamViewer, confirm it still launches and self-updates outside Homebrew.
 
 ## 6. Follow-Up Operations

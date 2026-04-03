@@ -40,7 +40,6 @@ CASKS=(
   dbeaver-community
   google-chrome
   postman
-  docker
   evernote
   intellij-idea
   zoom
@@ -76,6 +75,7 @@ GLOBAL_NPM_PACKAGES=(
 )
 
 MANUAL_CASKS=(
+  docker
   teamviewer
 )
 
