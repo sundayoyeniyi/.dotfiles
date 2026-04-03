@@ -47,7 +47,6 @@ CASKS=(
   temurin@21
   temurin@25
   anaconda
-  microsoft-edge
   microsoft-teams
   visual-studio-code
   chatgpt-atlas
@@ -75,6 +74,7 @@ GLOBAL_NPM_PACKAGES=(
 
 MANUAL_CASKS=(
   docker
+  microsoft-edge
   teamviewer
   wireshark
 )

@@ -7,6 +7,7 @@ This runbook is the operator checklist for keeping the local machine aligned to 
 - Desktop app: `codex-app`
 - Global Node CLIs: installed against the NVM default runtime
 - `docker` is currently treated as a manual app because the active Homebrew cask is failing validation
+- `microsoft-edge` is currently treated as a manual app because the active Homebrew cask upgrade is conflicting with the installed app bundle
 - `teamviewer` is currently treated as a manual app because the active Homebrew cask is failing validation
 - `wireshark` is currently treated as a manual app because the active Homebrew cask is failing validation
 
@@ -89,6 +90,7 @@ codex --version
 - [ ] Confirm `@github/copilot` and `@openai/codex` are installed globally.
 - [ ] Confirm `codex-app` remains installed for desktop usage.
 - [ ] If you use Docker Desktop, confirm it still launches and self-updates outside Homebrew.
+- [ ] If you use Microsoft Edge, confirm it still launches and self-updates outside Homebrew.
 - [ ] If you use TeamViewer, confirm it still launches and self-updates outside Homebrew.
 - [ ] If you use Wireshark, confirm it still launches and self-updates outside Homebrew.
 
