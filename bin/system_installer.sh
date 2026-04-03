@@ -43,7 +43,6 @@ CASKS=(
   evernote
   intellij-idea
   zoom
-  wireshark
   temurin@17
   temurin@21
   temurin@25
@@ -77,6 +76,7 @@ GLOBAL_NPM_PACKAGES=(
 MANUAL_CASKS=(
   docker
   teamviewer
+  wireshark
 )
 
 print_help() {
