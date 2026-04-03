@@ -213,7 +213,7 @@ run_post_install() {
 
   for file in "${post_install_files[@]}"
   do
-    "$file"
+    zsh "$file"
   done
 }
 
