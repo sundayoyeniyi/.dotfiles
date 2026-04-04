@@ -297,6 +297,22 @@ cask_target_version() {
   fi
 }
 
+npm_package_current_version() {
+  local package="$1"
+  local installed
+
+  installed="$(npm list -g --depth=0 "$package" 2>/dev/null | grep -E " ${package}@" | head -n 1 || true)"
+  if [ -n "$installed" ]; then
+    echo "${installed##*@}"
+  fi
+}
+
+npm_package_target_version() {
+  local package="$1"
+
+  npm view "$package" version 2>/dev/null || echo "unknown"
+}
+
 load_outdated_indices() {
   if ! command -v brew >/dev/null 2>&1; then
     return 0
@@ -466,6 +482,25 @@ show_info() {
   do
     printf "%s %-12s %-30s %s\n" "$(colorize_action "manual")" "cask" "$cask" "Homebrew cask currently skipped"
   done
+
+  echo
+  echo "Global npm packages:"
+  if load_nvm && nvm use default >/dev/null 2>&1; then
+    for package in "${GLOBAL_NPM_PACKAGES[@]}"
+    do
+      local current=""
+      local target="unknown"
+
+      if command -v npm >/dev/null 2>&1; then
+        current="$(npm_package_current_version "$package")"
+        target="$(npm_package_target_version "$package")"
+      fi
+
+      print_install_info "npm" "$package" "$current" "$target"
+    done
+  else
+    echo "Skipping npm package preview because the NVM default Node runtime is not active."
+  fi
 
   echo
   echo "Post-install follow-ups after any install action:"
