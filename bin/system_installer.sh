@@ -3,54 +3,54 @@
 set -euo pipefail
 
 FORMULAE=(
-  git
-  gradle
-  maven
-  maven-shell
-  jenv
-  nvm
-  kind
-  hashicorp/tap/terraform
-  tflint
-  zsh
-  zsh-completions
-  qpdf
-  uv
-  awscli
-  jq
-  curl
   aiven-client
-  doctl
-  heroku/brew/heroku
-  gh
+  aquasecurity/trivy/trivy
+  awscli
+  curl
   docker-completion
   docker-compose
   docker-machine
-  mkcert
+  doctl
+  gh
+  git
+  gradle
+  hashicorp/tap/terraform
+  heroku/brew/heroku
+  jenv
+  jq
+  kind
   lefthook
-  aquasecurity/trivy/trivy
-  tfsec
+  maven
+  maven-shell
+  mkcert
+  nvm
+  qpdf
   semgrep
+  tfsec
+  tflint
+  uv
+  zsh
+  zsh-completions
 )
 
 CASKS=(
-  github
-  whatsapp
-  iterm2
+  anaconda
+  chatgpt-atlas
+  codex-app
   dbeaver-community
-  google-chrome
-  postman
   evernote
+  github
+  google-chrome
   intellij-idea
-  zoom
+  iterm2
+  microsoft-teams
+  postman
+  redis-insight
   temurin@17
   temurin@21
   temurin@25
-  anaconda
-  microsoft-teams
-  chatgpt-atlas
-  codex-app
-  redis-insight
+  whatsapp
+  zoom
 )
 
 REMOVED_FORMULAE=(
@@ -66,8 +66,8 @@ REMOVED_CASKS=(
 )
 
 GLOBAL_NPM_PACKAGES=(
-  @github/copilot
   @openai/codex
+  @github/copilot
 )
 
 MANUAL_CASKS=(

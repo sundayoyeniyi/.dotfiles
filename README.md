@@ -6,7 +6,7 @@ This is the way I choose to organise the .dotfiles on my development machine and
 
 ## Installation
 
- > Clone the repo into your home folder and execute `./.dotfiles/bin/system_installer.sh` after reviewing the operator runbook in [RUNTIME-OPERATOR-RUNBOOK.md](/Users/sundayoyeniyi/projects/dotfiles/RUNTIME-OPERATOR-RUNBOOK.md). The desktop app is managed as `codex-app`, while the CLI is managed through the global npm package `@openai/codex`.
+ > Clone the repo into your home folder and execute `./.dotfiles/bin/system_installer.sh` after reviewing the script to make sure it does what you want it to do.  It will install the software I use and set up the shell prompt as I like it.
 
 ## Resulting shell prompt
 
