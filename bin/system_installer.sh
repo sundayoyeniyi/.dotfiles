@@ -80,6 +80,17 @@ MANUAL_CASKS=(
   wireshark
 )
 
+typeset -a OUTDATED_FORMULAE=()
+typeset -a OUTDATED_CASKS=()
+
+COLOR_RESET=""
+COLOR_BOLD=""
+COLOR_DIM=""
+COLOR_GREEN=""
+COLOR_YELLOW=""
+COLOR_RED=""
+COLOR_CYAN=""
+
 print_help() {
   cat <<'EOF'
 Usage: bin/system_installer.sh [flag ...]
@@ -99,6 +110,18 @@ Notes:
   - --all, --info, and --post are standalone modes.
   - Post-install scripts and NVM-backed global npm package updates run automatically after any install action.
 EOF
+}
+
+init_colors() {
+  if [[ -t 1 && -z "${NO_COLOR:-}" ]]; then
+    COLOR_RESET=$'\033[0m'
+    COLOR_BOLD=$'\033[1m'
+    COLOR_DIM=$'\033[2m'
+    COLOR_GREEN=$'\033[32m'
+    COLOR_YELLOW=$'\033[33m'
+    COLOR_RED=$'\033[31m'
+    COLOR_CYAN=$'\033[36m'
+  fi
 }
 
 ensure_homebrew() {
@@ -274,35 +297,114 @@ cask_target_version() {
   fi
 }
 
+load_outdated_indices() {
+  if ! command -v brew >/dev/null 2>&1; then
+    return 0
+  fi
+
+  OUTDATED_FORMULAE=("${(@f)$(brew outdated --formula --quiet 2>/dev/null || true)}")
+  OUTDATED_CASKS=("${(@f)$(brew outdated --cask --quiet 2>/dev/null || true)}")
+}
+
+array_contains() {
+  local needle="$1"
+  shift
+  local item
+
+  for item in "$@"
+  do
+    if [ "$item" = "$needle" ]; then
+      return 0
+    fi
+  done
+
+  return 1
+}
+
+install_action() {
+  local kind="$1"
+  local name="$2"
+  local current="$3"
+
+  if [ -z "$current" ]; then
+    echo "install"
+    return 0
+  fi
+
+  if [ "$kind" = "formula" ] && array_contains "$name" "${OUTDATED_FORMULAE[@]}"; then
+    echo "upgrade"
+    return 0
+  fi
+
+  if [ "$kind" = "cask" ] && array_contains "$name" "${OUTDATED_CASKS[@]}"; then
+    echo "upgrade"
+    return 0
+  fi
+
+  echo "current"
+}
+
+colorize_action() {
+  local action="$1"
+
+  case "$action" in
+    install)
+      printf "%s%-8s%s" "$COLOR_GREEN" "$action" "$COLOR_RESET"
+      ;;
+    upgrade)
+      printf "%s%-8s%s" "$COLOR_YELLOW" "$action" "$COLOR_RESET"
+      ;;
+    remove)
+      printf "%s%-8s%s" "$COLOR_RED" "$action" "$COLOR_RESET"
+      ;;
+    manual)
+      printf "%s%-8s%s" "$COLOR_CYAN" "$action" "$COLOR_RESET"
+      ;;
+    current)
+      printf "%s%-8s%s" "$COLOR_DIM" "$action" "$COLOR_RESET"
+      ;;
+    *)
+      printf "%-8s" "$action"
+      ;;
+  esac
+}
+
 print_install_info() {
   local kind="$1"
   local name="$2"
   local current="$3"
   local target="$4"
-  local action="install"
+  local action
 
-  if [ -n "$current" ]; then
-    action="upgrade"
-  fi
+  action="$(install_action "$kind" "$name" "$current")"
 
-  printf "%-8s %-12s %-30s %s -> %s\n" "$action" "$kind" "$name" "${current:-not installed}" "$target"
+  printf "%s %-12s %-30s %s -> %s\n" "$(colorize_action "$action")" "$kind" "$name" "${current:-not installed}" "$target"
 }
 
 print_remove_info() {
   local kind="$1"
   local name="$2"
   local current="$3"
+  local action="remove"
 
-  printf "%-8s %-12s %-30s %s\n" "remove" "$kind" "$name" "${current:-not installed}"
+  if [ -z "$current" ]; then
+    action="absent"
+  fi
+
+  printf "%s %-12s %-30s %s\n" "$(colorize_action "$action")" "$kind" "$name" "${current:-not installed}"
 }
 
 show_info() {
+  init_colors
+
   echo "Planned installs and upgrades"
   echo
 
   if ! command -v brew >/dev/null 2>&1; then
     echo "Homebrew is not installed, so current and target versions are unavailable."
     echo
+  else
+    load_outdated_indices
   fi
 
   echo "Formulae:"
@@ -362,7 +464,7 @@ show_info() {
   echo "Managed manually for now:"
   for cask in "${MANUAL_CASKS[@]}"
   do
-    printf "%-8s %-12s %-30s %s\n" "manual" "cask" "$cask" "Homebrew cask currently skipped"
+    printf "%s %-12s %-30s %s\n" "$(colorize_action "manual")" "cask" "$cask" "Homebrew cask currently skipped"
   done
 
   echo
