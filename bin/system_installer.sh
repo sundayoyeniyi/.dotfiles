@@ -24,7 +24,6 @@ FORMULAE=(
   maven-shell
   mkcert
   nvm
-  osv-scanner
   qpdf
   semgrep
   tfsec
@@ -56,6 +55,7 @@ CASKS=(
 
 REMOVED_FORMULAE=(
   node
+  osv-scanner
 )
 
 REMOVED_CASKS=(
