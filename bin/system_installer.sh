@@ -66,6 +66,11 @@ REMOVED_CASKS=(
   dash
 )
 
+# To remove a uv tool, move its entry from GLOBAL_UV_PACKAGES to here.
+# Uses the same "tool-name" or "tool-name:source" format; only the tool name matters for removal.
+REMOVED_UV_PACKAGES=(
+)
+
 GLOBAL_NPM_PACKAGES=(
   @openai/codex
   @github/copilot
@@ -105,17 +110,19 @@ Usage: bin/system_installer.sh [flag ...]
 Flags:
   --formula    Install or upgrade the configured Homebrew formulae.
   --casks      Install or upgrade the configured Homebrew casks.
+  --uv         Install or upgrade the configured global uv tools (GLOBAL_UV_PACKAGES).
   --info       Show the planned installs, upgrades, and removals with version info.
-  --uninstall  Remove everything marked for removal.
+  --uninstall  Remove everything marked for removal (REMOVED_FORMULAE, REMOVED_CASKS, REMOVED_UV_PACKAGES).
   --all        Run formulae, casks, uninstall, post-install steps, and global npm/uv tool updates.
   --help       Show this help message.
   --post       Run only the post-install scripts.
 
 Notes:
   - If no flag is provided, the script prints this help message.
-  - You can combine: --formula, --casks, and --uninstall.
+  - You can combine: --formula, --casks, --uv, and --uninstall.
   - --all, --info, and --post are standalone modes.
-  - Post-install scripts and NVM-backed global npm package updates run automatically after any install action.
+  - To remove a uv tool, move it from GLOBAL_UV_PACKAGES to REMOVED_UV_PACKAGES in this script.
+  - Post-install scripts and NVM-backed global npm/uv tool updates run automatically after any install action.
 EOF
 }
 
@@ -200,6 +207,24 @@ remove_cask() {
     brew uninstall --cask "$cask"
   else
     echo "Cask $cask not installed and can't be removed"
+  fi
+}
+
+remove_uv_package() {
+  local entry="$1"
+  local tool_name
+  tool_name="$(uv_tool_name "$entry")"
+
+  if ! command -v uv >/dev/null 2>&1; then
+    echo "Cannot remove uv tool $tool_name: uv is not available"
+    return
+  fi
+
+  if uv tool list 2>/dev/null | awk -v name="$tool_name" '$1 == name {found=1} END {exit !found}'; then
+    echo "Removing global uv tool: $tool_name"
+    uv tool uninstall "$tool_name"
+  else
+    echo "uv tool $tool_name not installed and can't be removed"
   fi
 }
 
@@ -546,6 +571,17 @@ show_info() {
     print_remove_info "cask" "$cask" "$current"
   done
 
+  for entry in "${REMOVED_UV_PACKAGES[@]}"
+  do
+    local current=""
+
+    if command -v uv >/dev/null 2>&1; then
+      current="$(uv_package_current_version "$entry")"
+    fi
+
+    print_remove_info "uv-tool" "$(uv_tool_name "$entry")" "$current"
+  done
+
   echo
   echo "Managed manually for now:"
   for cask in "${MANUAL_CASKS[@]}"
@@ -618,6 +654,11 @@ run_uninstall() {
   do
     remove_cask "$cask"
   done
+
+  for entry in "${REMOVED_UV_PACKAGES[@]}"
+  do
+    remove_uv_package "$entry"
+  done
 }
 
 run_install_followups() {
@@ -629,6 +670,7 @@ run_install_followups() {
 main() {
   local run_formula_flag=false
   local run_cask_flag=false
+  local run_uv_flag=false
   local run_uninstall_flag=false
   local run_post_flag=false
   local run_info_flag=false
@@ -648,6 +690,9 @@ main() {
         ;;
       --casks)
         run_cask_flag=true
+        ;;
+      --uv)
+        run_uv_flag=true
         ;;
       --uninstall)
         run_uninstall_flag=true
@@ -702,6 +747,12 @@ main() {
     exit 0
   fi
 
+  # --uv alone does not need Homebrew; handle it before the Homebrew setup.
+  if [ "$run_uv_flag" = true ] && [ "$run_formula_flag" = false ] && [ "$run_cask_flag" = false ] && [ "$run_uninstall_flag" = false ]; then
+    manage_global_uv_packages
+    exit 0
+  fi
+
   ensure_homebrew
   prepare_homebrew
 
@@ -719,7 +770,7 @@ main() {
 
   finalize_homebrew
 
-  if [ "$run_formula_flag" = true ] || [ "$run_cask_flag" = true ]; then
+  if [ "$run_formula_flag" = true ] || [ "$run_cask_flag" = true ] || [ "$run_uv_flag" = true ]; then
     run_install_followups
   fi
 }
