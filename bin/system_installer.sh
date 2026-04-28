@@ -71,6 +71,13 @@ GLOBAL_NPM_PACKAGES=(
   @github/copilot
 )
 
+GLOBAL_UV_PACKAGES=(
+  # Format: "tool-name:source" where source is a --from argument (git URL, etc.)
+  # For PyPI packages, use just the tool name with no colon.
+  # Note: source is only used on first install; upgrades always use uv tool upgrade.
+  "specify-cli:git+https://github.com/github/spec-kit.git"
+)
+
 MANUAL_CASKS=(
   docker
   microsoft-edge
@@ -100,7 +107,7 @@ Flags:
   --casks      Install or upgrade the configured Homebrew casks.
   --info       Show the planned installs, upgrades, and removals with version info.
   --uninstall  Remove everything marked for removal.
-  --all        Run formulae, casks, uninstall, post-install steps, and global npm package updates.
+  --all        Run formulae, casks, uninstall, post-install steps, and global npm/uv tool updates.
   --help       Show this help message.
   --post       Run only the post-install scripts.
 
@@ -251,6 +258,69 @@ manage_global_npm_packages() {
   else
     echo "Skipping global npm package management because the NVM default Node runtime is not active."
   fi
+}
+
+uv_tool_name() {
+  echo "${1%%:*}"
+}
+
+uv_tool_source() {
+  local entry="$1"
+  if [[ "$entry" == *:* ]]; then
+    echo "${entry#*:}"
+  fi
+}
+
+upgrade_uv_package() {
+  local entry="$1"
+  local tool_name source
+  tool_name="$(uv_tool_name "$entry")"
+  source="$(uv_tool_source "$entry")"
+
+  if ! uv tool list 2>/dev/null | awk -v name="$tool_name" '$1 == name {found=1} END {exit !found}'; then
+    echo "Installing global uv tool: $tool_name"
+    if [ -n "$source" ]; then
+      uv tool install "$tool_name" --from "$source"
+    else
+      uv tool install "$tool_name"
+    fi
+  else
+    echo "Upgrading global uv tool: $tool_name"
+    uv tool upgrade "$tool_name"
+  fi
+}
+
+uv_package_current_version() {
+  local entry="$1"
+  local tool_name version
+  tool_name="$(uv_tool_name "$entry")"
+  version="$(uv tool list 2>/dev/null | awk -v name="$tool_name" '$1 == name {print $2; exit}' || true)"
+  if [ -n "$version" ]; then
+    echo "${version#v}"
+  fi
+}
+
+uv_package_target_version() {
+  local entry="$1"
+  local source
+  source="$(uv_tool_source "$entry")"
+  if [ -n "$source" ]; then
+    echo "git-latest"
+  else
+    echo "unknown"
+  fi
+}
+
+manage_global_uv_packages() {
+  if ! command -v uv >/dev/null 2>&1; then
+    echo "Skipping global uv tool management because uv is not available."
+    return
+  fi
+  echo "> Managing global uv tools"
+  for entry in "${GLOBAL_UV_PACKAGES[@]}"
+  do
+    upgrade_uv_package "$entry"
+  done
 }
 
 formula_current_version() {
@@ -503,9 +573,25 @@ show_info() {
   fi
 
   echo
+  echo "Global uv tools:"
+  if command -v uv >/dev/null 2>&1; then
+    for entry in "${GLOBAL_UV_PACKAGES[@]}"
+    do
+      local current=""
+      local target="unknown"
+      current="$(uv_package_current_version "$entry")"
+      target="$(uv_package_target_version "$entry")"
+      print_install_info "uv-tool" "$(uv_tool_name "$entry")" "$current" "$target"
+    done
+  else
+    echo "Skipping uv tool preview because uv is not available."
+  fi
+
+  echo
   echo "Post-install follow-ups after any install action:"
   echo "  - Run all scripts in \$HOME/.dotfiles/post-install"
   echo "  - Load NVM and update global npm packages: ${GLOBAL_NPM_PACKAGES[*]}"
+  echo "  - Update global uv tools: ${GLOBAL_UV_PACKAGES[*]}"
 }
 
 run_formulae() {
@@ -537,6 +623,7 @@ run_uninstall() {
 run_install_followups() {
   run_post_install
   manage_global_npm_packages
+  manage_global_uv_packages
 }
 
 main() {
