@@ -32,7 +32,7 @@ _copilot_link() {
 
 _copilot_link "$_COPILOT_PLAYBOOK/skills" "$HOME/.copilot/skills"
 _copilot_link "$_COPILOT_PLAYBOOK/agents" "$HOME/.copilot/agents"
-_copilot_link "$_COPILOT_PLAYBOOK/.github/instructions" "$HOME/.copilot/instructions"
+_copilot_link "$_COPILOT_PLAYBOOK/instructions" "$HOME/.copilot/instructions"
 
 unset _COPILOT_PLAYBOOK
 unfunction _copilot_link
