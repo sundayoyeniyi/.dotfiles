@@ -5,7 +5,7 @@
 # See: https://docs.github.com/copilot/concepts/agents/about-copilot-cli
 _COPILOT_PLAYBOOK="$HOME/projects/ai-playbook-kit"
 
-export COPILOT_CUSTOM_INSTRUCTIONS_DIRS="$_COPILOT_PLAYBOOK/.github/instructions"
+export COPILOT_CUSTOM_INSTRUCTIONS_DIRS="$HOME/.copilot/instructions"
 
 # Link skills and agents from ai-playbook-kit into ~/.copilot so the CLI picks them
 # up without any manual copying. Symlinks are created lazily: if the source does not
@@ -32,6 +32,7 @@ _copilot_link() {
 
 _copilot_link "$_COPILOT_PLAYBOOK/skills" "$HOME/.copilot/skills"
 _copilot_link "$_COPILOT_PLAYBOOK/agents" "$HOME/.copilot/agents"
+_copilot_link "$_COPILOT_PLAYBOOK/.github/instructions" "$HOME/.copilot/instructions"
 
 unset _COPILOT_PLAYBOOK
 unfunction _copilot_link
