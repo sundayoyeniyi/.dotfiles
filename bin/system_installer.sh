@@ -273,8 +273,16 @@ run_post_install() {
   done
 }
 
+sync_nvm_default_packages() {
+  local default_packages_file="${NVM_DIR:-$HOME/.nvm}/default-packages"
+
+  printf '%s\n' "${GLOBAL_NPM_PACKAGES[@]}" > "$default_packages_file"
+  echo "Synced $default_packages_file (${#GLOBAL_NPM_PACKAGES[@]} package(s) — auto-installed into every new nvm node version)"
+}
+
 manage_global_npm_packages() {
   if load_nvm && nvm use default >/dev/null 2>&1; then
+    sync_nvm_default_packages
     echo "> Managing global npm packages"
     for package in "${GLOBAL_NPM_PACKAGES[@]}"
     do
