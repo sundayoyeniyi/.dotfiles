@@ -68,14 +68,13 @@ REMOVED_CASKS=(
   dash
 )
 
-# To remove a uv tool, move its entry from GLOBAL_UV_PACKAGES to here.
-# Uses the same "tool-name" or "tool-name:source" format; only the tool name matters for removal.
-REMOVED_UV_PACKAGES=(
-)
-
 GLOBAL_NPM_PACKAGES=(
   @openai/codex
   @github/copilot
+)
+
+# To remove a global npm package, move its entry from GLOBAL_NPM_PACKAGES to here.
+REMOVED_NPM_PACKAGES=(
 )
 
 GLOBAL_UV_PACKAGES=(
@@ -83,6 +82,11 @@ GLOBAL_UV_PACKAGES=(
   # For PyPI packages, use just the tool name with no colon.
   # Note: source is only used on first install; upgrades always use uv tool upgrade.
   "specify-cli:git+https://github.com/github/spec-kit.git"
+)
+
+# To remove a uv tool, move its entry from GLOBAL_UV_PACKAGES to here.
+# Uses the same "tool-name" or "tool-name:source" format; only the tool name matters for removal.
+REMOVED_UV_PACKAGES=(
 )
 
 MANUAL_CASKS=(
@@ -114,7 +118,7 @@ Flags:
   --casks      Install or upgrade the configured Homebrew casks.
   --uv         Install or upgrade the configured global uv tools (GLOBAL_UV_PACKAGES).
   --info       Show the planned installs, upgrades, and removals with version info.
-  --uninstall  Remove everything marked for removal (REMOVED_FORMULAE, REMOVED_CASKS, REMOVED_UV_PACKAGES).
+  --uninstall  Remove everything marked for removal (REMOVED_FORMULAE, REMOVED_CASKS, REMOVED_UV_PACKAGES, REMOVED_NPM_PACKAGES).
   --all        Run formulae, casks, uninstall, post-install steps, and global npm/uv tool updates.
   --help       Show this help message.
   --post       Run only the post-install scripts.
@@ -124,6 +128,7 @@ Notes:
   - You can combine: --formula, --casks, --uv, and --uninstall.
   - --all, --info, and --post are standalone modes.
   - To remove a uv tool, move it from GLOBAL_UV_PACKAGES to REMOVED_UV_PACKAGES in this script.
+  - To remove a global npm package, move it from GLOBAL_NPM_PACKAGES to REMOVED_NPM_PACKAGES in this script.
   - Post-install scripts and NVM-backed global npm/uv tool updates run automatically after any install action.
 EOF
 }
@@ -209,6 +214,17 @@ remove_cask() {
     brew uninstall --cask "$cask"
   else
     echo "Cask $cask not installed and can't be removed"
+  fi
+}
+
+remove_npm_package() {
+  local package="$1"
+
+  if npm list -g --depth=0 "$package" >/dev/null 2>&1; then
+    echo "Removing global npm package: $package"
+    npm uninstall -g "$package"
+  else
+    echo "npm package $package not installed and can't be removed"
   fi
 }
 
@@ -592,6 +608,15 @@ show_info() {
     print_remove_info "uv-tool" "$(uv_tool_name "$entry")" "$current"
   done
 
+  if load_nvm && nvm use default >/dev/null 2>&1; then
+    for package in "${REMOVED_NPM_PACKAGES[@]}"
+    do
+      local current=""
+      current="$(npm_package_current_version "$package")"
+      print_remove_info "npm" "$package" "$current"
+    done
+  fi
+
   echo
   echo "Managed manually for now:"
   for cask in "${MANUAL_CASKS[@]}"
@@ -669,6 +694,18 @@ run_uninstall() {
   do
     remove_uv_package "$entry"
   done
+
+  if (( ${#REMOVED_NPM_PACKAGES[@]} > 0 )); then
+    if load_nvm && nvm use default >/dev/null 2>&1; then
+      for package in "${REMOVED_NPM_PACKAGES[@]}"
+      do
+        remove_npm_package "$package"
+      done
+      sync_nvm_default_packages
+    else
+      echo "Skipping npm package removal because the NVM default Node runtime is not active."
+    fi
+  fi
 }
 
 run_install_followups() {
