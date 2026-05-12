@@ -31,6 +31,7 @@ FORMULAE=(
   uv
   zsh
   zsh-completions
+  claude-code
 )
 
 CASKS=(
@@ -51,6 +52,7 @@ CASKS=(
   temurin@25
   whatsapp
   zoom
+  claude
 )
 
 REMOVED_FORMULAE=(
