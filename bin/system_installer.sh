@@ -24,6 +24,7 @@ FORMULAE=(
   maven-shell
   mkcert
   nvm
+  plantuml
   qpdf
   semgrep
   tfsec
