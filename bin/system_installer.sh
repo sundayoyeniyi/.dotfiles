@@ -66,7 +66,6 @@ REMOVED_FORMULAE=(
 
 REMOVED_CASKS=(
   apache-directory-studio
-  codex
   corretto@17
   corretto@21
   dash
