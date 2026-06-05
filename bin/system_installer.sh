@@ -6,9 +6,6 @@ FORMULAE=(
   aiven-client
   aquasecurity/trivy/trivy
   awscli
-  claude-code
-  codex
-  copilot-cli
   curl
   docker-completion
   docker-compose
@@ -41,6 +38,8 @@ CASKS=(
   anaconda
   chatgpt-atlas
   claude
+  claude-code
+  codex
   codex-app
   copilot-cli
   dbeaver-community
@@ -234,6 +233,20 @@ remove_npm_package() {
   fi
 }
 
+remove_marked_npm_packages() {
+  local package
+
+  if (( ${#REMOVED_NPM_PACKAGES[@]} == 0 )); then
+    return 0
+  fi
+
+  echo "> Removing deprecated global npm packages"
+  for package in "${REMOVED_NPM_PACKAGES[@]}"
+  do
+    remove_npm_package "$package"
+  done
+}
+
 remove_uv_package() {
   local entry="$1"
   local tool_name
@@ -307,6 +320,7 @@ sync_nvm_default_packages() {
 manage_global_npm_packages() {
   if load_nvm && nvm use default >/dev/null 2>&1; then
     sync_nvm_default_packages
+    remove_marked_npm_packages
     echo "> Managing global npm packages"
     for package in "${GLOBAL_NPM_PACKAGES[@]}"
     do
@@ -703,10 +717,7 @@ run_uninstall() {
 
   if (( ${#REMOVED_NPM_PACKAGES[@]} > 0 )); then
     if load_nvm && nvm use default >/dev/null 2>&1; then
-      for package in "${REMOVED_NPM_PACKAGES[@]}"
-      do
-        remove_npm_package "$package"
-      done
+      remove_marked_npm_packages
       sync_nvm_default_packages
     else
       echo "Skipping npm package removal because the NVM default Node runtime is not active."
