@@ -6,6 +6,9 @@ FORMULAE=(
   aiven-client
   aquasecurity/trivy/trivy
   awscli
+  claude-code
+  codex
+  copilot-cli
   curl
   docker-completion
   docker-compose
@@ -32,13 +35,14 @@ FORMULAE=(
   uv
   zsh
   zsh-completions
-  claude-code
 )
 
 CASKS=(
   anaconda
   chatgpt-atlas
+  claude
   codex-app
+  copilot-app
   dbeaver-community
   evernote
   github
@@ -53,7 +57,6 @@ CASKS=(
   temurin@25
   whatsapp
   zoom
-  claude
 )
 
 REMOVED_FORMULAE=(
