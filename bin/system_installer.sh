@@ -42,10 +42,11 @@ CASKS=(
   chatgpt-atlas
   claude
   codex-app
-  copilot-app
+  copilot-cli
   dbeaver-community
   evernote
   github
+  github-copilot-app
   google-chrome
   intellij-idea
   iterm2
@@ -73,12 +74,13 @@ REMOVED_CASKS=(
 )
 
 GLOBAL_NPM_PACKAGES=(
-  @openai/codex
-  @github/copilot
+
 )
 
 # To remove a global npm package, move its entry from GLOBAL_NPM_PACKAGES to here.
 REMOVED_NPM_PACKAGES=(
+  @openai/codex
+  @github/copilot
 )
 
 GLOBAL_UV_PACKAGES=(
