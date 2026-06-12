@@ -36,6 +36,7 @@ FORMULAE=(
 
 CASKS=(
   anaconda
+  chatgpt
   chatgpt-atlas
   claude
   claude-code
