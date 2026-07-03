@@ -24,6 +24,8 @@ FORMULAE=(
   maven-shell
   mkcert
   nvm
+  ollama
+  opencode
   plantuml
   qpdf
   semgrep
@@ -51,11 +53,13 @@ CASKS=(
   intellij-idea
   iterm2
   microsoft-teams
+  opencode-desktop
   postman
   redis-insight
   temurin@17
   temurin@21
   temurin@25
+  wezterm
   whatsapp
   zoom
 )
