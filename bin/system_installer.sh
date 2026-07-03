@@ -46,7 +46,6 @@ CASKS=(
   codex-app
   copilot-cli
   dbeaver-community
-  evernote
   github
   github-copilot-app
   google-chrome
@@ -74,6 +73,7 @@ REMOVED_CASKS=(
   corretto@17
   corretto@21
   dash
+  evernote
 )
 
 GLOBAL_NPM_PACKAGES=(
