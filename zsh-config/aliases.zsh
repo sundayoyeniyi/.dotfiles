@@ -37,4 +37,10 @@ alias gstop='./gradlew stopserver'
 
 #IDE aliases
 alias vs='code .'
-alias cx='codex'
+alias cx='codex .'
+
+#Script aliases
+alias vall='./scripts/validate-local.sh --all'
+
+#Docker aliases
+alias dps='docker ps -a'
