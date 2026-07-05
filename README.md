@@ -8,6 +8,12 @@ This is the way I choose to organise the .dotfiles on my development machine and
 
  > Clone the repo into your home folder and execute `./.dotfiles/bin/system_installer.sh` after reviewing the script to make sure it does what you want it to do.  It will install the software I use and set up the shell prompt as I like it.
 
+## WezTerm
+
+WezTerm is configured through `symlinks/wezterm.lua.symlink`, which is installed as `~/.wezterm.lua` by `./.dotfiles/bin/symlink_installer.sh`.
+
+The starter config uses JetBrains Mono at 18pt, the Tokyo Night colour scheme, ligatures, macOS-friendly window defaults, conservative padding, tab and pane shortcuts, and a small amount of transparency/blur.
+
 ## Resulting shell prompt
 
 ![shell prompt](/assets/my-shell-prompt.png)
