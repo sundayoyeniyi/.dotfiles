@@ -41,6 +41,8 @@ alias cx='codex .'
 
 #Script aliases
 alias vall='./scripts/validate-local.sh --all'
+alias start='./scripts/start-server.sh'
+alias stop='./scripts/stop-server.sh'
 
 #Docker aliases
 alias dps='docker ps -a'
