@@ -14,6 +14,20 @@ WezTerm is configured through `symlinks/wezterm.lua.symlink`, which is installed
 
 The starter config uses JetBrains Mono at 18pt, the Tokyo Night colour scheme, ligatures, macOS-friendly window defaults, conservative padding, tab and pane shortcuts, and a small amount of transparency/blur.
 
+The TradeAlpha workspace can be launched with:
+
+```sh
+./.dotfiles/bin/tradealpha_workspace.sh
+```
+
+It opens a `TradeAlpha` WezTerm workspace with panes for Ollama, the TradeAlpha server, and OpenCode using `ollama/qwen3-coder:30b`.
+
+## OpenCode
+
+OpenCode is configured through `config/opencode/opencode.json.symlink`, which is installed as `~/.config/opencode/opencode.json` by `./.dotfiles/bin/symlink_installer.sh`.
+
+The config uses Ollama at `http://localhost:11434/v1` and registers the local models currently managed here: `qwen3-coder:30b`, `deepseek-r1:14b`, and `gpt-oss:20b`.
+
 ## Resulting shell prompt
 
 ![shell prompt](/assets/my-shell-prompt.png)

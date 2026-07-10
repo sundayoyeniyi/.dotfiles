@@ -1,6 +1,85 @@
 local wezterm = require("wezterm")
+local mux = wezterm.mux
 
 local config = wezterm.config_builder()
+
+local tradealpha_workspace = "TradeAlpha"
+local tradealpha_dir = wezterm.home_dir .. "/projects/trade-alpha"
+local tradealpha_model = "ollama/qwen3-coder:30b"
+
+local function shell_command(command)
+  return { "/bin/zsh", "-lc", command }
+end
+
+local function spawn_tradealpha_workspace()
+  local ollama_command = [[
+if ollama list >/dev/null 2>&1; then
+  echo "Ollama is already running."
+  exec /bin/zsh -l
+fi
+
+echo "Starting Ollama..."
+ollama serve
+status=$?
+echo "Ollama exited with status $status"
+exec /bin/zsh -l
+]]
+
+  local server_command = [[
+./scripts/start-server.sh
+status=$?
+echo "TradeAlpha server exited with status $status"
+exec /bin/zsh -l
+]]
+
+  local opencode_command = "until ollama list >/dev/null 2>&1; do\n"
+    .. "  echo \"Waiting for Ollama...\"\n"
+    .. "  sleep 2\n"
+    .. "done\n"
+    .. "opencode . --model "
+    .. tradealpha_model
+    .. "\n"
+    .. "status=$?\n"
+    .. "echo \"OpenCode exited with status $status\"\n"
+    .. "exec /bin/zsh -l\n"
+
+  local _, ollama_pane, window = mux.spawn_window({
+    workspace = tradealpha_workspace,
+    cwd = tradealpha_dir,
+    args = shell_command(ollama_command),
+  })
+
+  ollama_pane:split({
+    direction = "Right",
+    size = 0.5,
+    cwd = tradealpha_dir,
+    args = shell_command(server_command),
+  })
+
+  ollama_pane:split({
+    direction = "Bottom",
+    size = 0.35,
+    cwd = tradealpha_dir,
+    args = shell_command(opencode_command),
+  })
+
+  mux.set_active_workspace(tradealpha_workspace)
+
+  local gui_window = window:gui_window()
+  if gui_window then
+    gui_window:maximize()
+  end
+end
+
+wezterm.on("gui-startup", function()
+  if os.getenv("WEZTERM_TRADEALPHA_WORKSPACE") == "1" then
+    spawn_tradealpha_workspace()
+  end
+end)
+
+wezterm.on("tradealpha-workspace", function()
+  spawn_tradealpha_workspace()
+end)
 
 config.color_scheme = "Tokyo Night"
 
@@ -75,6 +154,11 @@ config.keys = {
     key = "d",
     mods = "CMD|SHIFT",
     action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
+  },
+  {
+    key = "A",
+    mods = "CMD|SHIFT",
+    action = wezterm.action.EmitEvent("tradealpha-workspace"),
   },
   {
     key = "[",
