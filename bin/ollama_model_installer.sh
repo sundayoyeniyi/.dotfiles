@@ -3,7 +3,7 @@
 set -euo pipefail
 
 PULL_MODELS=(
-  qwen-coder:30b
+  qwen3-coder:30b
   deepseek-r1:14b
   gpt-oss:20b
 )
