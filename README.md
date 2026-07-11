@@ -24,7 +24,11 @@ Shortcuts:
 - `CMD+SHIFT+W`: open the project workspace selector.
 - `CMD+SHIFT+P`: open the standard WezTerm launcher.
 
-The TradeAlpha workspace opens a `TradeAlpha` tab with Ollama, React, Spring Boot, and OpenCode panes, plus a `Shell` tab rooted at `~/projects/trade-alpha`.
+The TradeAlpha workspace opens three tabs:
+
+- `TradeAlpha1`: Ollama and OpenCode.
+- `TradeAlpha2`: development dependencies, backend watcher, backend runtime, and frontend runtime.
+- `Shell`: an extra login shell rooted at `~/projects/trade-alpha`.
 
 ## OpenCode
 

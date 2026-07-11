@@ -11,38 +11,53 @@ local M = {
   frontend_dir = wezterm.home_dir .. "/projects/trade-alpha/frontend",
   backend_dir = wezterm.home_dir .. "/projects/trade-alpha",
 
-  frontend_command = "npm run dev",
-  backend_command = "./gradlew :platform:monolith:bootRun -PskipFrontendBuild=true",
+  dev_dependencies_command = "./scripts/start-dev-dependencies.sh",
+  watch_backend_command = "./scripts/watch-dev-backend.sh",
+  backend_command = "./scripts/start-dev-backend.sh",
+  frontend_command = "./scripts/start-dev-frontend.sh",
   opencode_command = "opencode --model ollama/qwen3-coder:30b",
 }
 
 local function create_workspace()
-  local tab, ollama_pane, window = mux.spawn_window({
+  local tradealpha1_tab, ollama_pane, window = mux.spawn_window({
     workspace = M.workspace_name,
     cwd = M.project_root,
     args = commands.zsh(commands.ollama_serve()),
   })
-  tab:set_title(M.display_name)
+  tradealpha1_tab:set_title("TradeAlpha1")
 
-  local opencode_pane = ollama_pane:split({
+  ollama_pane:split({
     direction = "Bottom",
-    size = 0.42,
+    size = 0.6,
     cwd = M.project_root,
     args = commands.zsh(commands.wrap(M.opencode_command)),
   })
 
-  local frontend_pane = ollama_pane:split({
+  local tradealpha2_tab, dev_dependencies_pane = window:spawn_tab({
+    cwd = M.project_root,
+    args = commands.zsh(commands.wrap(M.dev_dependencies_command)),
+  })
+  tradealpha2_tab:set_title("TradeAlpha2")
+
+  local watch_backend_pane = dev_dependencies_pane:split({
     direction = "Right",
-    size = 0.67,
-    cwd = M.frontend_dir,
-    args = commands.zsh(commands.wrap(M.frontend_command)),
+    size = 0.5,
+    cwd = M.project_root,
+    args = commands.zsh(commands.wrap(M.watch_backend_command)),
   })
 
-  frontend_pane:split({
-    direction = "Right",
+  dev_dependencies_pane:split({
+    direction = "Bottom",
     size = 0.5,
     cwd = M.backend_dir,
     args = commands.zsh(commands.wrap(M.backend_command)),
+  })
+
+  watch_backend_pane:split({
+    direction = "Bottom",
+    size = 0.5,
+    cwd = M.project_root,
+    args = commands.zsh(commands.wrap(M.frontend_command)),
   })
 
   local shell_tab = window:spawn_tab({
@@ -50,7 +65,7 @@ local function create_workspace()
   })
   shell_tab:set_title("Shell")
 
-  tab:activate()
+  tradealpha1_tab:activate()
   mux.set_active_workspace(M.workspace_name)
 
   local gui_window = window:gui_window()
@@ -58,7 +73,7 @@ local function create_workspace()
     gui_window:maximize()
   end
 
-  return opencode_pane
+  return ollama_pane
 end
 
 function M.activate(_, _)
