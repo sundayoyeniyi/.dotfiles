@@ -1,0 +1,55 @@
+local wezterm = require("wezterm")
+
+local M = {}
+
+function M.apply(config)
+  config.color_scheme = "Tokyo Night"
+
+  config.font = wezterm.font_with_fallback({
+    {
+      family = "JetBrains Mono",
+      weight = "Regular",
+    },
+    "Symbols Nerd Font",
+    "Apple Color Emoji",
+  })
+  config.font_size = 18.0
+  config.harfbuzz_features = {
+    "calt=1",
+    "clig=1",
+    "liga=1",
+  }
+
+  config.window_decorations = "RESIZE"
+  config.window_close_confirmation = "NeverPrompt"
+  config.window_padding = {
+    left = 12,
+    right = 12,
+    top = 10,
+    bottom = 10,
+  }
+
+  config.initial_cols = 120
+  config.initial_rows = 34
+  config.adjust_window_size_when_changing_font_size = false
+  config.scrollback_lines = 10000
+
+  config.enable_tab_bar = true
+  config.hide_tab_bar_if_only_one_tab = true
+  config.use_fancy_tab_bar = false
+  config.tab_bar_at_bottom = false
+
+  config.default_cursor_style = "BlinkingBar"
+  config.cursor_blink_rate = 650
+  config.audible_bell = "Disabled"
+  config.check_for_updates = false
+
+  config.window_background_opacity = 0.96
+  config.macos_window_background_blur = 20
+  config.inactive_pane_hsb = {
+    saturation = 0.9,
+    brightness = 0.75,
+  }
+end
+
+return M

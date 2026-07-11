@@ -1,175 +1,21 @@
 local wezterm = require("wezterm")
-local mux = wezterm.mux
 
-local config = wezterm.config_builder()
+local repo_config_path = wezterm.config_dir .. "/../config/wezterm/wezterm.lua"
+local installed_config_path = wezterm.home_dir .. "/.config/wezterm/wezterm.lua"
 
-local tradealpha_workspace = "TradeAlpha"
-local tradealpha_dir = wezterm.home_dir .. "/projects/trade-alpha"
-local tradealpha_model = "ollama/qwen3-coder:30b"
+local config_file = io.open(repo_config_path, "r")
+local config_path = installed_config_path
 
-local function shell_command(command)
-  return { "/bin/zsh", "-lc", command }
+if config_file then
+  config_file:close()
+  config_path = repo_config_path
 end
 
-local function spawn_tradealpha_workspace()
-  local ollama_command = [[
-if ollama list >/dev/null 2>&1; then
-  echo "Ollama is already running."
-  exec /bin/zsh -l
-fi
-
-echo "Starting Ollama..."
-ollama serve
-status=$?
-echo "Ollama exited with status $status"
-exec /bin/zsh -l
-]]
-
-  local server_command = [[
-./scripts/start-server.sh
-status=$?
-echo "TradeAlpha server exited with status $status"
-exec /bin/zsh -l
-]]
-
-  local opencode_command = "until ollama list >/dev/null 2>&1; do\n"
-    .. "  echo \"Waiting for Ollama...\"\n"
-    .. "  sleep 2\n"
-    .. "done\n"
-    .. "opencode . --model "
-    .. tradealpha_model
-    .. "\n"
-    .. "status=$?\n"
-    .. "echo \"OpenCode exited with status $status\"\n"
-    .. "exec /bin/zsh -l\n"
-
-  local _, ollama_pane, window = mux.spawn_window({
-    workspace = tradealpha_workspace,
-    cwd = tradealpha_dir,
-    args = shell_command(ollama_command),
-  })
-
-  ollama_pane:split({
-    direction = "Right",
-    size = 0.5,
-    cwd = tradealpha_dir,
-    args = shell_command(server_command),
-  })
-
-  ollama_pane:split({
-    direction = "Bottom",
-    size = 0.35,
-    cwd = tradealpha_dir,
-    args = shell_command(opencode_command),
-  })
-
-  mux.set_active_workspace(tradealpha_workspace)
-
-  local gui_window = window:gui_window()
-  if gui_window then
-    gui_window:maximize()
-  end
+local config_dir = config_path:match("(.+)/[^/]+$")
+if config_dir then
+  package.path = config_dir .. "/?.lua;" .. config_dir .. "/?/init.lua;" .. package.path
 end
 
-wezterm.on("gui-startup", function()
-  if os.getenv("WEZTERM_TRADEALPHA_WORKSPACE") == "1" then
-    spawn_tradealpha_workspace()
-  end
-end)
-
-wezterm.on("tradealpha-workspace", function()
-  spawn_tradealpha_workspace()
-end)
-
-config.color_scheme = "Tokyo Night"
-
-config.font = wezterm.font_with_fallback({
-  {
-    family = "JetBrains Mono",
-    weight = "Regular",
-  },
-  "Symbols Nerd Font",
-  "Apple Color Emoji",
-})
-config.font_size = 18.0
-config.harfbuzz_features = {
-  "calt=1",
-  "clig=1",
-  "liga=1",
-}
-
-config.window_decorations = "RESIZE"
-config.window_close_confirmation = "NeverPrompt"
-config.window_padding = {
-  left = 12,
-  right = 12,
-  top = 10,
-  bottom = 10,
-}
-
-config.initial_cols = 120
-config.initial_rows = 34
-config.adjust_window_size_when_changing_font_size = false
-config.scrollback_lines = 10000
-
-config.enable_tab_bar = true
-config.hide_tab_bar_if_only_one_tab = true
-config.use_fancy_tab_bar = false
-config.tab_bar_at_bottom = false
-
-config.default_cursor_style = "BlinkingBar"
-config.cursor_blink_rate = 650
-config.audible_bell = "Disabled"
-config.check_for_updates = false
-
-config.window_background_opacity = 0.96
-config.macos_window_background_blur = 20
-config.inactive_pane_hsb = {
-  saturation = 0.9,
-  brightness = 0.75,
-}
-
-config.keys = {
-  {
-    key = "Enter",
-    mods = "CMD",
-    action = wezterm.action.ToggleFullScreen,
-  },
-  {
-    key = "t",
-    mods = "CMD",
-    action = wezterm.action.SpawnTab("CurrentPaneDomain"),
-  },
-  {
-    key = "w",
-    mods = "CMD",
-    action = wezterm.action.CloseCurrentTab({ confirm = true }),
-  },
-  {
-    key = "d",
-    mods = "CMD",
-    action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }),
-  },
-  {
-    key = "d",
-    mods = "CMD|SHIFT",
-    action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
-  },
-  {
-    key = "A",
-    mods = "CMD|SHIFT",
-    action = wezterm.action.EmitEvent("tradealpha-workspace"),
-  },
-  {
-    key = "[",
-    mods = "CMD",
-    action = wezterm.action.ActivatePaneDirection("Prev"),
-  },
-  {
-    key = "]",
-    mods = "CMD",
-    action = wezterm.action.ActivatePaneDirection("Next"),
-  },
-}
+local config = dofile(config_path)
 
 return config

@@ -10,17 +10,21 @@ This is the way I choose to organise the .dotfiles on my development machine and
 
 ## WezTerm
 
-WezTerm is configured through `symlinks/wezterm.lua.symlink`, which is installed as `~/.wezterm.lua` by `./.dotfiles/bin/symlink_installer.sh`.
+WezTerm is configured through `config/wezterm/wezterm.lua`, which is installed as `~/.config/wezterm/wezterm.lua` by `./.dotfiles/bin/symlink_installer.sh`.
 
 The starter config uses JetBrains Mono at 18pt, the Tokyo Night colour scheme, ligatures, macOS-friendly window defaults, conservative padding, tab and pane shortcuts, and a small amount of transparency/blur.
 
-The TradeAlpha workspace can be launched with:
+`symlinks/wezterm.lua.symlink` remains as a compatibility shim for WezTerm setups that still read `~/.wezterm.lua`.
 
-```sh
-./.dotfiles/bin/tradealpha_workspace.sh
-```
+The TradeAlpha workspace is lazy: it is not created on WezTerm startup and only starts services after explicit activation.
 
-It opens a `TradeAlpha` WezTerm workspace with panes for Ollama, the TradeAlpha server, and OpenCode using `ollama/qwen3-coder:30b`.
+Shortcuts:
+
+- `CMD+SHIFT+1`: activate or create the TradeAlpha workspace.
+- `CMD+SHIFT+W`: open the project workspace selector.
+- `CMD+SHIFT+P`: open the standard WezTerm launcher.
+
+The TradeAlpha workspace opens a `TradeAlpha` tab with Ollama, React, Spring Boot, and OpenCode panes, plus a `Shell` tab rooted at `~/projects/trade-alpha`.
 
 ## OpenCode
 
