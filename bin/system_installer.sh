@@ -20,6 +20,7 @@ FORMULAE=(
   jq
   kind
   lefthook
+  lsof
   maven
   maven-shell
   mkcert
