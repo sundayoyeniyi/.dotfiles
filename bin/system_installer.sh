@@ -44,7 +44,6 @@ CASKS=(
   claude
   claude-code
   codex
-  codex-app
   copilot-cli
   dbeaver-community
   github
@@ -71,6 +70,7 @@ REMOVED_FORMULAE=(
 
 REMOVED_CASKS=(
   apache-directory-studio
+  codex-app
   corretto@17
   corretto@21
   dash
