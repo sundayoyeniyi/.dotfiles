@@ -40,7 +40,6 @@ FORMULAE=(
 CASKS=(
   anaconda
   chatgpt
-  chatgpt-atlas
   claude
   claude-code
   codex
@@ -70,6 +69,7 @@ REMOVED_FORMULAE=(
 
 REMOVED_CASKS=(
   apache-directory-studio
+  chatgpt-atlas
   codex-app
   corretto@17
   corretto@21
