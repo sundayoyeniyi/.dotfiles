@@ -1,7 +1,6 @@
 local wezterm = require("wezterm")
 local mux = wezterm.mux
 local commands = require("utils.commands")
-local layout = require("config.tradalpha_layout")
 
 local workspaces = require("utils.workspaces")
 
