@@ -47,3 +47,6 @@ alias stop='./scripts/stop-server.sh'
 
 #Docker aliases
 alias dps='docker ps -a'
+
+#Python aliases
+alias py='python3'
