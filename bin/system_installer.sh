@@ -2,65 +2,7 @@
 
 set -euo pipefail
 
-FORMULAE=(
-  aiven-client
-  aquasecurity/trivy/trivy
-  awscli
-  curl
-  docker-completion
-  docker-compose
-  docker-machine
-  doctl
-  gh
-  git
-  gradle
-  hashicorp/tap/terraform
-  heroku/brew/heroku
-  jenv
-  jq
-  kind
-  lefthook
-  lsof
-  maven
-  maven-shell
-  mkcert
-  nvm
-  ollama
-  opencode
-  plantuml
-  qpdf
-  semgrep
-  tfsec
-  tflint
-  uv
-  zsh
-  zsh-completions
-)
-
-CASKS=(
-  anaconda
-  chatgpt
-  claude
-  claude-code
-  codex
-  copilot-cli
-  dbeaver-community
-  github
-  github-copilot-app
-  google-chrome
-  intellij-idea
-  iterm2
-  microsoft-teams
-  opencode-desktop
-  postman
-  redis-insight
-  temurin@17
-  temurin@21
-  temurin@25
-  wezterm
-  whatsapp
-  zoom
-)
+BREWFILE="${ZSH:-$HOME/.dotfiles}/Brewfile"
 
 REMOVED_FORMULAE=(
   node
@@ -107,9 +49,6 @@ MANUAL_CASKS=(
   wireshark
 )
 
-typeset -a OUTDATED_FORMULAE=()
-typeset -a OUTDATED_CASKS=()
-
 COLOR_RESET=""
 COLOR_BOLD=""
 COLOR_DIM=""
@@ -123,10 +62,10 @@ print_help() {
 Usage: bin/system_installer.sh [flag ...]
 
 Flags:
-  --formula    Install or upgrade the configured Homebrew formulae.
-  --casks      Install or upgrade the configured Homebrew casks.
+  --formula    Install or upgrade Homebrew formulae from Brewfile.
+  --casks      Install or upgrade Homebrew casks from Brewfile.
   --uv         Install or upgrade the configured global uv tools (GLOBAL_UV_PACKAGES).
-  --info       Show the planned installs, upgrades, and removals with version info.
+  --info       Show planned installs, upgrades, and removals.
   --uninstall  Remove everything marked for removal (REMOVED_FORMULAE, REMOVED_CASKS, REMOVED_UV_PACKAGES, REMOVED_NPM_PACKAGES).
   --all        Run formulae, casks, uninstall, post-install steps, and global npm/uv tool updates.
   --help       Show this help message.
@@ -136,6 +75,8 @@ Notes:
   - If no flag is provided, the script prints this help message.
   - You can combine: --formula, --casks, --uv, and --uninstall.
   - --all, --info, and --post are standalone modes.
+  - Packages are managed via Brewfile at the repo root. Edit Brewfile to add/remove packages.
+  - To mark a brew formula/cask for removal, move it into REMOVED_FORMULAE or REMOVED_CASKS in this script.
   - To remove a uv tool, move it from GLOBAL_UV_PACKAGES to REMOVED_UV_PACKAGES in this script.
   - To remove a global npm package, move it from GLOBAL_NPM_PACKAGES to REMOVED_NPM_PACKAGES in this script.
   - Post-install scripts and NVM-backed global npm/uv tool updates run automatically after any install action.
@@ -172,36 +113,10 @@ ensure_homebrew() {
 
 prepare_homebrew() {
   brew update
-  brew tap hashicorp/tap
-  brew tap aquasecurity/trivy
 }
 
 finalize_homebrew() {
   brew cleanup
-}
-
-upgrade_formula() {
-  local formula="$1"
-
-  if ! brew list --versions "$formula" >/dev/null 2>&1; then
-    echo "Installing formula: $formula"
-    brew install "$formula"
-  else
-    echo "Upgrading formula: $formula"
-    brew upgrade "$formula"
-  fi
-}
-
-upgrade_cask() {
-  local cask="$1"
-
-  if ! brew list --cask --versions "$cask" >/dev/null 2>&1; then
-    echo "Installing cask: $cask"
-    brew install --cask "$cask"
-  else
-    echo "Upgrading cask: $cask"
-    brew upgrade --cask "$cask"
-  fi
 }
 
 remove_formula() {
@@ -398,50 +313,6 @@ manage_global_uv_packages() {
   done
 }
 
-formula_current_version() {
-  local formula="$1"
-  local installed
-
-  installed="$(brew list --versions "$formula" 2>/dev/null || true)"
-  if [ -n "$installed" ]; then
-    echo "${installed#${formula} }"
-  fi
-}
-
-formula_target_version() {
-  local formula="$1"
-  local line
-
-  line="$(brew info "$formula" 2>/dev/null | sed -n '1p' || true)"
-  if [[ "$line" == *"stable "* ]]; then
-    echo "$line" | sed -E 's/.*stable ([^ ,]+).*/\1/'
-  else
-    echo "unknown"
-  fi
-}
-
-cask_current_version() {
-  local cask="$1"
-  local installed
-
-  installed="$(brew list --cask --versions "$cask" 2>/dev/null || true)"
-  if [ -n "$installed" ]; then
-    echo "${installed#${cask} }"
-  fi
-}
-
-cask_target_version() {
-  local cask="$1"
-  local line
-
-  line="$(brew info --cask "$cask" 2>/dev/null | sed -n '1p' || true)"
-  if [ -n "$line" ]; then
-    echo "${line#*: }"
-  else
-    echo "unknown"
-  fi
-}
-
 npm_package_current_version() {
   local package="$1"
   local installed
@@ -456,53 +327,6 @@ npm_package_target_version() {
   local package="$1"
 
   npm view "$package" version 2>/dev/null || echo "unknown"
-}
-
-load_outdated_indices() {
-  if ! command -v brew >/dev/null 2>&1; then
-    return 0
-  fi
-
-  OUTDATED_FORMULAE=("${(@f)$(brew outdated --formula --quiet 2>/dev/null || true)}")
-  OUTDATED_CASKS=("${(@f)$(brew outdated --cask --quiet 2>/dev/null || true)}")
-}
-
-array_contains() {
-  local needle="$1"
-  shift
-  local item
-
-  for item in "$@"
-  do
-    if [ "$item" = "$needle" ]; then
-      return 0
-    fi
-  done
-
-  return 1
-}
-
-install_action() {
-  local kind="$1"
-  local name="$2"
-  local current="$3"
-
-  if [ -z "$current" ]; then
-    echo "install"
-    return 0
-  fi
-
-  if [ "$kind" = "formula" ] && array_contains "$name" "${OUTDATED_FORMULAE[@]}"; then
-    echo "upgrade"
-    return 0
-  fi
-
-  if [ "$kind" = "cask" ] && array_contains "$name" "${OUTDATED_CASKS[@]}"; then
-    echo "upgrade"
-    return 0
-  fi
-
-  echo "current"
 }
 
 colorize_action() {
@@ -530,18 +354,6 @@ colorize_action() {
   esac
 }
 
-print_install_info() {
-  local kind="$1"
-  local name="$2"
-  local current="$3"
-  local target="$4"
-  local action
-
-  action="$(install_action "$kind" "$name" "$current")"
-
-  printf "%s %-12s %-30s %s -> %s\n" "$(colorize_action "$action")" "$kind" "$name" "${current:-not installed}" "$target"
-}
-
 print_remove_info() {
   local kind="$1"
   local name="$2"
@@ -558,77 +370,45 @@ print_remove_info() {
 show_info() {
   init_colors
 
-  echo "Planned installs and upgrades"
-  echo
-
-  if ! command -v brew >/dev/null 2>&1; then
-    echo "Homebrew is not installed, so current and target versions are unavailable."
-    echo
+  echo "Brewfile status:"
+  if command -v brew >/dev/null 2>&1; then
+    brew bundle check --file="$BREWFILE" --verbose || true
   else
-    load_outdated_indices
+    echo "  Homebrew is not installed."
   fi
-
-  echo "Formulae:"
-  for formula in "${FORMULAE[@]}"
-  do
-    local current=""
-    local target="unknown"
-
-    if command -v brew >/dev/null 2>&1; then
-      current="$(formula_current_version "$formula")"
-      target="$(formula_target_version "$formula")"
-    fi
-
-    print_install_info "formula" "$formula" "$current" "$target"
-  done
-
-  echo
-  echo "Casks:"
-  for cask in "${CASKS[@]}"
-  do
-    local current=""
-    local target="unknown"
-
-    if command -v brew >/dev/null 2>&1; then
-      current="$(cask_current_version "$cask")"
-      target="$(cask_target_version "$cask")"
-    fi
-
-    print_install_info "cask" "$cask" "$current" "$target"
-  done
 
   echo
   echo "Marked for removal:"
   for formula in "${REMOVED_FORMULAE[@]}"
   do
     local current=""
-
     if command -v brew >/dev/null 2>&1; then
-      current="$(formula_current_version "$formula")"
+      installed="$(brew list --versions "$formula" 2>/dev/null || true)"
+      if [ -n "$installed" ]; then
+        current="${installed#${formula} }"
+      fi
     fi
-
     print_remove_info "formula" "$formula" "$current"
   done
 
   for cask in "${REMOVED_CASKS[@]}"
   do
     local current=""
-
     if command -v brew >/dev/null 2>&1; then
-      current="$(cask_current_version "$cask")"
+      installed="$(brew list --cask --versions "$cask" 2>/dev/null || true)"
+      if [ -n "$installed" ]; then
+        current="${installed#${cask} }"
+      fi
     fi
-
     print_remove_info "cask" "$cask" "$current"
   done
 
   for entry in "${REMOVED_UV_PACKAGES[@]}"
   do
     local current=""
-
     if command -v uv >/dev/null 2>&1; then
       current="$(uv_package_current_version "$entry")"
     fi
-
     print_remove_info "uv-tool" "$(uv_tool_name "$entry")" "$current"
   done
 
@@ -642,7 +422,7 @@ show_info() {
   fi
 
   echo
-  echo "Managed manually for now:"
+  echo "Managed manually (not in Brewfile):"
   for cask in "${MANUAL_CASKS[@]}"
   do
     printf "%s %-12s %-30s %s\n" "$(colorize_action "manual")" "cask" "$cask" "Homebrew cask currently skipped"
@@ -655,16 +435,18 @@ show_info() {
     do
       local current=""
       local target="unknown"
-
       if command -v npm >/dev/null 2>&1; then
         current="$(npm_package_current_version "$package")"
         target="$(npm_package_target_version "$package")"
       fi
-
-      print_install_info "npm" "$package" "$current" "$target"
+      if [ -z "$current" ]; then
+        printf "%s %-12s %-30s %s -> %s\n" "$(colorize_action "install")" "npm" "$package" "not installed" "$target"
+      else
+        printf "%s %-12s %-30s %s -> %s\n" "$(colorize_action "current")" "npm" "$package" "$current" "$target"
+      fi
     done
   else
-    echo "Skipping npm package preview because the NVM default Node runtime is not active."
+    echo "  Skipping npm package preview because the NVM default Node runtime is not active."
   fi
 
   echo
@@ -676,10 +458,14 @@ show_info() {
       local target="unknown"
       current="$(uv_package_current_version "$entry")"
       target="$(uv_package_target_version "$entry")"
-      print_install_info "uv-tool" "$(uv_tool_name "$entry")" "$current" "$target"
+      if [ -z "$current" ]; then
+        printf "%s %-12s %-30s %s -> %s\n" "$(colorize_action "install")" "uv-tool" "$(uv_tool_name "$entry")" "not installed" "$target"
+      else
+        printf "%s %-12s %-30s %s -> %s\n" "$(colorize_action "current")" "uv-tool" "$(uv_tool_name "$entry")" "$current" "$target"
+      fi
     done
   else
-    echo "Skipping uv tool preview because uv is not available."
+    echo "  Skipping uv tool preview because uv is not available."
   fi
 
   echo
@@ -690,17 +476,11 @@ show_info() {
 }
 
 run_formulae() {
-  for formula in "${FORMULAE[@]}"
-  do
-    upgrade_formula "$formula"
-  done
+  brew bundle --file="$BREWFILE" --no-cask
 }
 
 run_casks() {
-  for cask in "${CASKS[@]}"
-  do
-    upgrade_cask "$cask"
-  done
+  brew bundle --file="$BREWFILE" --no-formula
 }
 
 run_uninstall() {
