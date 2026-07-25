@@ -1,50 +1,86 @@
 # .dotfiles
 
-## Introduction
+Personal dotfiles for macOS development. No Oh My Zsh — just plain Zsh configuration modules, Homebrew package management via Brewfile, WezTerm terminal config, and utility scripts.
 
-This is the way I choose to organise the .dotfiles on my development machine and install my software development arsenals.  It is largely personal but I was influenced and motivated to do this because I cannot find my way around OMZ - if you know what I mean.
+## Structure
 
-## Installation
+| Path | Purpose |
+|------|---------|
+| `Brewfile` | Declarative Homebrew package list (formulae + casks) |
+| `zsh-config/` | Zsh configuration modules (sourced in order by `.zshrc`) |
+| `symlinks/` | Symlink sources for `~/.zshrc`, `~/.gitignore`, `~/.vimrc` |
+| `config/wezterm/` | WezTerm terminal configuration |
+| `bin/` | Installer and update scripts |
+| `post-install/` | Post-bootstrap setup (shell, Node, Java) |
+| `updates/` | System update scripts |
+| `assets/` | Screenshots |
 
- > Clone the repo into your home folder and execute `./.dotfiles/bin/system_installer.sh` after reviewing the script to make sure it does what you want it to do.  It will install the software I use and set up the shell prompt as I like it.
+## Quick start
+
+```sh
+git clone git@github.com:sundayoyeniyi/.dotfiles.git ~/.dotfiles
+~/.dotfiles/bin/symlink_installer.sh    # symlink configs into $HOME
+~/.dotfiles/bin/system_installer.sh --all   # install everything
+```
+
+Review the scripts first — they install the tools, languages, and apps I use daily.
+
+## Package management
+
+Packages are managed through a `Brewfile` at the repo root. To add or remove a Homebrew-managed package, edit `Brewfile` and re-run:
+
+```sh
+bin/system_installer.sh --all
+```
+
+For granular control:
+
+```sh
+bin/system_installer.sh --formula   # install/upgrade formulae only
+bin/system_installer.sh --casks     # install/upgrade casks only
+bin/system_installer.sh --uv        # install/upgrade uv tools
+bin/system_installer.sh --uninstall # remove deprecated packages
+bin/system_installer.sh --info      # show pending changes
+```
+
+## Zsh configuration
+
+`.zshrc` is a thin entry point that sources `zsh-config/*.zsh` in order:
+
+- **Options** — Zsh settings (`autocd`, `CORRECT`, etc.)
+- **Environment** — PATH entries for Homebrew, NVM, jenv, Anaconda, uv, Ollama, IntelliJ, Gradle
+- **Completions** — Homebrew Zsh completions
+- **Aliases** — Git, Gradle, Docker, IDE, and script shortcuts
+- **Prompt** — Custom prompt with Git status via `__git_ps1`
+
+Secrets and proxy settings go in `secrets.zsh` / `proxy_install.zsh` (templates provided, gitignored).
 
 ## WezTerm
 
-WezTerm is configured through `config/wezterm/wezterm.lua`, which is installed as `~/.config/wezterm/wezterm.lua` by `./.dotfiles/bin/symlink_installer.sh`.
+Configuration lives in `config/wezterm/`. Features:
 
-The starter config uses JetBrains Mono at 18pt, the Tokyo Night colour scheme, ligatures, macOS-friendly window defaults, conservative padding, tab and pane shortcuts, and a small amount of transparency/blur.
+- Tokyo Night colour scheme, JetBrains Mono 18pt, ligatures
+- Tab bar, pane splitting, workspace management
+- Project launcher with workspace registry
+- TradeAlpha workspace: 3-tab layout with Ollama, OpenCode, dev servers
 
-The TradeAlpha workspace is lazy: it is not created on WezTerm startup and only starts services after explicit activation.
+## Symlinks
 
-Shortcuts:
+`bin/symlink_installer.sh` creates symlinks from the repo into `$HOME`:
 
-- `CMD+SHIFT+1`: activate or create the TradeAlpha workspace.
-- `CMD+SHIFT+W`: open the project workspace selector.
-- `CMD+SHIFT+P`: open the standard WezTerm launcher.
+| Source | Destination |
+|--------|-------------|
+| `symlinks/zshrc.symlink` | `~/.zshrc` |
+| `symlinks/gitignore.symlink` | `~/.gitignore` |
+| `symlinks/vimrc.symlink` | `~/.vimrc` |
+| `config/wezterm/` | `~/.config/wezterm/` |
 
-The TradeAlpha workspace opens three tabs:
+## Shell prompt
 
-- `TradeAlpha1`: Ollama and OpenCode.
-- `TradeAlpha2`: development dependencies, backend watcher, backend runtime, and frontend runtime.
-- `Shell`: an extra login shell rooted at `~/projects/trade-alpha`.
-
-## Resulting shell prompt
-
-![shell prompt](/assets/my-shell-prompt.png)
-
-## Outstanding task list
-
-1. WIP
-
-## Contributing
-
-> This is work in progress **WIP** and I am happy for you to teach me what to do via a pull request.
+![shell prompt](assets/my-shell-prompt.png)
 
 ## Resources
 
-The resources I found very useful are:
-
-1. [ZSH](http://zsh.sourceforge.net).
-1. [holman](http://zachholman.com/2010/08/dotfiles-are-meant-to-be-forked/).
-1. [dotfiles](https://dotfiles.github.io/).
-1. [dotfiles hosting](http://www.dotfiles.org/).
+- [ZSH](http://zsh.sourceforge.net)
+- [holman dotfiles](http://zachholman.com/2010/08/dotfiles-are-meant-to-be-forked/)
+- [dotfiles.github.io](https://dotfiles.github.io/)
