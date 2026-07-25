@@ -1,5 +1,7 @@
 #! /bin/zsh
 
+set -euo pipefail
+
 export ZSH=$HOME/.dotfiles
 
 update_files=($ZSH/updates/*.sh)

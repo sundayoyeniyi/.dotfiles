@@ -21,6 +21,3 @@ fi
 nvm install 24
 nvm alias default 24
 nvm use default
-
-echo "> global npm packages"
-

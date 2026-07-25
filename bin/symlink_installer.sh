@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+set -euo pipefail
+
 export ZSH=$HOME/.dotfiles
 symlinks=($ZSH/symlinks/*.symlink)
 for symlink in ${symlinks}

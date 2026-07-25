@@ -104,7 +104,6 @@ MANUAL_CASKS=(
   microsoft-edge
   teamviewer
   visual-studio-code
-  visual-studio-code@insiders
   wireshark
 )
 
@@ -776,6 +775,7 @@ main() {
         saw_all_flag=true
         run_formula_flag=true
         run_cask_flag=true
+        run_uv_flag=true
         run_uninstall_flag=true
         ;;
       --help)
