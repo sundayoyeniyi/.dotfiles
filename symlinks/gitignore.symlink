@@ -23,3 +23,6 @@ logs/
 # Ignore eclipse project files
 /.project
 /.pydevproject
+
+# Graphify generated output
+**/graphify-out/
