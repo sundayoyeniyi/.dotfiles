@@ -38,7 +38,7 @@ For granular control:
 ```sh
 bin/system_installer.sh --formula   # install/upgrade formulae only
 bin/system_installer.sh --casks     # install/upgrade casks only
-bin/system_installer.sh --uv        # install/upgrade uv tools
+bin/system_installer.sh --python        # install/upgrade global python packages (uv tools)
 bin/system_installer.sh --uninstall # remove deprecated packages
 bin/system_installer.sh --info      # show pending changes
 ```

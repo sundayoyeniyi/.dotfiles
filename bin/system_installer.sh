@@ -29,16 +29,17 @@ REMOVED_NPM_PACKAGES=(
   @github/copilot
 )
 
-GLOBAL_UV_PACKAGES=(
+GLOBAL_PYTHON_PACKAGES=(
   # Format: "tool-name:source" where source is a --from argument (git URL, etc.)
   # For PyPI packages, use just the tool name with no colon.
   # Note: source is only used on first install; upgrades always use uv tool upgrade.
   "specify-cli:git+https://github.com/github/spec-kit.git"
+  "graphifyy"
 )
 
-# To remove a uv tool, move its entry from GLOBAL_UV_PACKAGES to here.
+# To remove a python package, move its entry from GLOBAL_PYTHON_PACKAGES to here.
 # Uses the same "tool-name" or "tool-name:source" format; only the tool name matters for removal.
-REMOVED_UV_PACKAGES=(
+REMOVED_PYTHON_PACKAGES=(
 )
 
 MANUAL_CASKS=(
@@ -64,22 +65,22 @@ Usage: bin/system_installer.sh [flag ...]
 Flags:
   --formula    Install or upgrade Homebrew formulae from Brewfile.
   --casks      Install or upgrade Homebrew casks from Brewfile.
-  --uv         Install or upgrade the configured global uv tools (GLOBAL_UV_PACKAGES).
+  --python     Install or upgrade the configured global python packages (GLOBAL_PYTHON_PACKAGES).
   --info       Show planned installs, upgrades, and removals.
-  --uninstall  Remove everything marked for removal (REMOVED_FORMULAE, REMOVED_CASKS, REMOVED_UV_PACKAGES, REMOVED_NPM_PACKAGES).
-  --all        Run formulae, casks, uninstall, post-install steps, and global npm/uv tool updates.
+  --uninstall  Remove everything marked for removal (REMOVED_FORMULAE, REMOVED_CASKS, REMOVED_PYTHON_PACKAGES, REMOVED_NPM_PACKAGES).
+  --all        Run formulae, casks, uninstall, post-install steps, and global npm/python package updates.
   --help       Show this help message.
   --post       Run only the post-install scripts.
 
 Notes:
   - If no flag is provided, the script prints this help message.
-  - You can combine: --formula, --casks, --uv, and --uninstall.
+  - You can combine: --formula, --casks, --python, and --uninstall.
   - --all, --info, and --post are standalone modes.
   - Packages are managed via Brewfile at the repo root. Edit Brewfile to add/remove packages.
   - To mark a brew formula/cask for removal, move it into REMOVED_FORMULAE or REMOVED_CASKS in this script.
-  - To remove a uv tool, move it from GLOBAL_UV_PACKAGES to REMOVED_UV_PACKAGES in this script.
+  - To remove a python package, move it from GLOBAL_PYTHON_PACKAGES to REMOVED_PYTHON_PACKAGES in this script.
   - To remove a global npm package, move it from GLOBAL_NPM_PACKAGES to REMOVED_NPM_PACKAGES in this script.
-  - Post-install scripts and NVM-backed global npm/uv tool updates run automatically after any install action.
+  - Post-install scripts and NVM-backed global npm/python package updates run automatically after any install action.
 EOF
 }
 
@@ -172,15 +173,15 @@ remove_uv_package() {
   tool_name="$(uv_tool_name "$entry")"
 
   if ! command -v uv >/dev/null 2>&1; then
-    echo "Cannot remove uv tool $tool_name: uv is not available"
+    echo "Cannot remove python package $tool_name: uv is not available"
     return
   fi
 
   if uv tool list 2>/dev/null | awk -v name="$tool_name" '$1 == name {found=1} END {exit !found}'; then
-    echo "Removing global uv tool: $tool_name"
+    echo "Removing global python package: $tool_name"
     uv tool uninstall "$tool_name"
   else
-    echo "uv tool $tool_name not installed and can't be removed"
+    echo "python package $tool_name not installed and can't be removed"
   fi
 }
 
@@ -268,14 +269,14 @@ upgrade_uv_package() {
   source="$(uv_tool_source "$entry")"
 
   if ! uv tool list 2>/dev/null | awk -v name="$tool_name" '$1 == name {found=1} END {exit !found}'; then
-    echo "Installing global uv tool: $tool_name"
+    echo "Installing global python package: $tool_name"
     if [ -n "$source" ]; then
       uv tool install "$tool_name" --from "$source"
     else
       uv tool install "$tool_name"
     fi
   else
-    echo "Upgrading global uv tool: $tool_name"
+    echo "Upgrading global python package: $tool_name"
     uv tool upgrade "$tool_name"
   fi
 }
@@ -303,11 +304,11 @@ uv_package_target_version() {
 
 manage_global_uv_packages() {
   if ! command -v uv >/dev/null 2>&1; then
-    echo "Skipping global uv tool management because uv is not available."
+    echo "Skipping global python package management because uv is not available."
     return
   fi
-  echo "> Managing global uv tools"
-  for entry in "${GLOBAL_UV_PACKAGES[@]}"
+  echo "> Managing global python packages"
+  for entry in "${GLOBAL_PYTHON_PACKAGES[@]}"
   do
     upgrade_uv_package "$entry"
   done
@@ -403,13 +404,13 @@ show_info() {
     print_remove_info "cask" "$cask" "$current"
   done
 
-  for entry in "${REMOVED_UV_PACKAGES[@]}"
+  for entry in "${REMOVED_PYTHON_PACKAGES[@]}"
   do
     local current=""
     if command -v uv >/dev/null 2>&1; then
       current="$(uv_package_current_version "$entry")"
     fi
-    print_remove_info "uv-tool" "$(uv_tool_name "$entry")" "$current"
+    print_remove_info "python" "$(uv_tool_name "$entry")" "$current"
   done
 
   if load_nvm && nvm use default >/dev/null 2>&1; then
@@ -450,29 +451,29 @@ show_info() {
   fi
 
   echo
-  echo "Global uv tools:"
+  echo "Global python packages:"
   if command -v uv >/dev/null 2>&1; then
-    for entry in "${GLOBAL_UV_PACKAGES[@]}"
+    for entry in "${GLOBAL_PYTHON_PACKAGES[@]}"
     do
       local current=""
       local target="unknown"
       current="$(uv_package_current_version "$entry")"
       target="$(uv_package_target_version "$entry")"
       if [ -z "$current" ]; then
-        printf "%s %-12s %-30s %s -> %s\n" "$(colorize_action "install")" "uv-tool" "$(uv_tool_name "$entry")" "not installed" "$target"
+        printf "%s %-12s %-30s %s -> %s\n" "$(colorize_action "install")" "python" "$(uv_tool_name "$entry")" "not installed" "$target"
       else
-        printf "%s %-12s %-30s %s -> %s\n" "$(colorize_action "current")" "uv-tool" "$(uv_tool_name "$entry")" "$current" "$target"
+        printf "%s %-12s %-30s %s -> %s\n" "$(colorize_action "current")" "python" "$(uv_tool_name "$entry")" "$current" "$target"
       fi
     done
   else
-    echo "  Skipping uv tool preview because uv is not available."
+    echo "  Skipping python package preview because uv is not available."
   fi
 
   echo
   echo "Post-install follow-ups after any install action:"
   echo "  - Run all scripts in \$HOME/.dotfiles/post-install"
   echo "  - Load NVM and update global npm packages: ${GLOBAL_NPM_PACKAGES[*]}"
-  echo "  - Update global uv tools: ${GLOBAL_UV_PACKAGES[*]}"
+  echo "  - Update global python packages: ${GLOBAL_PYTHON_PACKAGES[*]}"
 }
 
 run_formulae() {
@@ -494,7 +495,7 @@ run_uninstall() {
     remove_cask "$cask"
   done
 
-  for entry in "${REMOVED_UV_PACKAGES[@]}"
+  for entry in "${REMOVED_PYTHON_PACKAGES[@]}"
   do
     remove_uv_package "$entry"
   done
@@ -518,7 +519,7 @@ run_install_followups() {
 main() {
   local run_formula_flag=false
   local run_cask_flag=false
-  local run_uv_flag=false
+  local run_python_flag=false
   local run_uninstall_flag=false
   local run_post_flag=false
   local run_info_flag=false
@@ -539,8 +540,8 @@ main() {
       --casks)
         run_cask_flag=true
         ;;
-      --uv)
-        run_uv_flag=true
+      --python)
+        run_python_flag=true
         ;;
       --uninstall)
         run_uninstall_flag=true
@@ -555,7 +556,7 @@ main() {
         saw_all_flag=true
         run_formula_flag=true
         run_cask_flag=true
-        run_uv_flag=true
+        run_python_flag=true
         run_uninstall_flag=true
         ;;
       --help)
@@ -596,8 +597,8 @@ main() {
     exit 0
   fi
 
-  # --uv alone does not need Homebrew; handle it before the Homebrew setup.
-  if [ "$run_uv_flag" = true ] && [ "$run_formula_flag" = false ] && [ "$run_cask_flag" = false ] && [ "$run_uninstall_flag" = false ]; then
+  # --python alone does not need Homebrew; handle it before the Homebrew setup.
+  if [ "$run_python_flag" = true ] && [ "$run_formula_flag" = false ] && [ "$run_cask_flag" = false ] && [ "$run_uninstall_flag" = false ]; then
     manage_global_uv_packages
     exit 0
   fi
@@ -619,7 +620,7 @@ main() {
 
   finalize_homebrew
 
-  if [ "$run_formula_flag" = true ] || [ "$run_cask_flag" = true ] || [ "$run_uv_flag" = true ]; then
+  if [ "$run_formula_flag" = true ] || [ "$run_cask_flag" = true ] || [ "$run_python_flag" = true ]; then
     run_install_followups
   fi
 }
