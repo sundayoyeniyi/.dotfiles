@@ -30,11 +30,11 @@ REMOVED_NPM_PACKAGES=(
 )
 
 GLOBAL_PYTHON_PACKAGES=(
-  # Format: "tool-name:source" where source is a --from argument (git URL, etc.)
-  # For PyPI packages, use just the tool name with no colon.
-  # Note: source is only used on first install; upgrades always use uv tool upgrade.
+  # Format: "tool-name:requirement" where requirement is passed directly to uv tool install.
+  # This supports Git sources and package extras while keeping the stable uv tool name explicit.
+  # For ordinary PyPI tools without extras, use just the tool name with no colon.
   "specify-cli:git+https://github.com/github/spec-kit.git"
-  "graphifyy"
+  "graphifyy:graphifyy[terraform,sql]"
 )
 
 # To remove a python package, move its entry from GLOBAL_PYTHON_PACKAGES to here.
@@ -268,13 +268,15 @@ upgrade_uv_package() {
   tool_name="$(uv_tool_name "$entry")"
   source="$(uv_tool_source "$entry")"
 
+  if [ -n "$source" ]; then
+    echo "Installing or reconciling global python package: $tool_name"
+    uv tool install --upgrade "$source"
+    return
+  fi
+
   if ! uv tool list 2>/dev/null | awk -v name="$tool_name" '$1 == name {found=1} END {exit !found}'; then
     echo "Installing global python package: $tool_name"
-    if [ -n "$source" ]; then
-      uv tool install "$tool_name" --from "$source"
-    else
-      uv tool install "$tool_name"
-    fi
+    uv tool install "$tool_name"
   else
     echo "Upgrading global python package: $tool_name"
     uv tool upgrade "$tool_name"
@@ -296,7 +298,11 @@ uv_package_target_version() {
   local source
   source="$(uv_tool_source "$entry")"
   if [ -n "$source" ]; then
-    echo "git-latest"
+    if [[ "$source" == git+* ]]; then
+      echo "git-latest"
+    else
+      echo "$source"
+    fi
   else
     echo "unknown"
   fi

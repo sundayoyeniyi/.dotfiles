@@ -43,6 +43,11 @@ bin/system_installer.sh --uninstall # remove deprecated packages
 bin/system_installer.sh --info      # show pending changes
 ```
 
+Global Python CLI tools are managed as isolated `uv tool` environments by `GLOBAL_PYTHON_PACKAGES` in
+`bin/system_installer.sh`. Graphify is installed from `graphifyy[terraform,sql]`, so its Terraform/HCL and SQL
+tree-sitter parsers are available without a separate system `pip install`. Run `bin/system_installer.sh --python` to
+install or reconcile those extras; `--all` includes the same step.
+
 ## Zsh configuration
 
 `.zshrc` is a thin entry point that sources `zsh-config/*.zsh` in order:
