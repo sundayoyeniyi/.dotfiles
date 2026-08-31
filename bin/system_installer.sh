@@ -114,6 +114,20 @@ ensure_homebrew() {
 
 prepare_homebrew() {
   brew update
+  trust_brewfile_taps
+}
+
+# Homebrew 6.x refuses to load formulae/casks from third-party taps until the
+# tap is explicitly trusted. Trust every tap declared in the Brewfile so
+# `brew bundle install` can proceed without manual `brew trust`.
+trust_brewfile_taps() {
+  local tap
+  echo "> Trusting third-party taps from Brewfile"
+
+  while IFS= read -r tap; do
+    [[ -z "$tap" ]] && continue
+    brew trust --tap "$tap" >/dev/null 2>&1 || echo "  Could not trust tap: $tap"
+  done < <(grep -E '^[[:space:]]*tap ' "$BREWFILE" | sed -E 's/.*tap "([^"]+)".*/\1/')
 }
 
 finalize_homebrew() {
