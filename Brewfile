@@ -2,6 +2,7 @@
 tap "hashicorp/tap"
 tap "aquasecurity/trivy"
 tap "heroku/brew"
+tap "rtk-ai/tap"
 
 # Formulae
 brew "aiven-client"
@@ -30,6 +31,7 @@ brew "ollama"
 brew "opencode"
 brew "plantuml"
 brew "qpdf"
+brew "rtk-ai/tap/rtk"
 brew "semgrep"
 brew "tfsec"
 brew "tflint"
