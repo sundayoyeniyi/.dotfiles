@@ -390,6 +390,76 @@ print_remove_info() {
   printf "%s %-12s %-30s %s\n" "$(colorize_action "$action")" "$kind" "$name" "${current:-not installed}"
 }
 
+brewfile_brew_names() {
+  grep -E '^[[:space:]]*brew ' "$BREWFILE" 2>/dev/null | sed -E 's/^[[:space:]]*brew "([^"]+)".*/\1/'
+}
+
+brewfile_cask_names() {
+  grep -E '^[[:space:]]*cask ' "$BREWFILE" 2>/dev/null | sed -E 's/^[[:space:]]*cask "([^"]+)".*/\1/'
+}
+
+brew_formula_current_version() {
+  local formula="$1"
+  brew list --versions "$formula" 2>/dev/null | awk '{print $2}'
+}
+
+brew_formula_target_version() {
+  local formula="$1"
+  local stable revision
+  if command -v jq >/dev/null 2>&1; then
+    stable="$(brew info --formula "$formula" --json=v2 2>/dev/null | jq -r '.formulae[0].versions.stable' 2>/dev/null)"
+    if [ -z "$stable" ]; then
+      echo "unknown"
+      return
+    fi
+    revision="$(brew info --formula "$formula" --json=v2 2>/dev/null | jq -r '.formulae[0].revision' 2>/dev/null)"
+    if [ -n "$revision" ] && [ "$revision" != "0" ] && [ "$revision" != "null" ]; then
+      echo "${stable}_${revision}"
+    else
+      echo "$stable"
+    fi
+  else
+    echo "unknown"
+  fi
+}
+
+brew_cask_current_version() {
+  local cask="$1"
+  brew list --cask --versions "$cask" 2>/dev/null | awk '{print $2}'
+}
+
+brew_cask_target_version() {
+  local cask="$1"
+  local version
+  if command -v jq >/dev/null 2>&1; then
+    version="$(brew info --cask "$cask" --json=v2 2>/dev/null | jq -r '.casks[0].version' 2>/dev/null)"
+    echo "${version:-unknown}"
+  else
+    echo "unknown"
+  fi
+}
+
+print_package_status() {
+  local kind="$1"
+  local name="$2"
+  local current="$3"
+  local target="$4"
+  local no_compare="${5:-false}"
+  local action="current"
+
+  if [ -z "$current" ]; then
+    action="install"
+  elif [ "$no_compare" = false ] && [ -n "$target" ] && [ "$target" != "unknown" ] && [ "$target" != "git-latest" ] && [ "$current" != "$target" ]; then
+    action="upgrade"
+  fi
+
+  if [ "$action" = "current" ]; then
+    printf "%s %-12s %-30s %s\n" "$(colorize_action "$action")" "$kind" "$name" "${current:-not installed}"
+  else
+    printf "%s %-12s %-30s %s -> %s\n" "$(colorize_action "$action")" "$kind" "$name" "${current:-not installed}" "$target"
+  fi
+}
+
 show_info() {
   init_colors
 
@@ -452,7 +522,33 @@ show_info() {
   done
 
   echo
-  echo "Global npm packages:"
+  echo "Homebrew formulae (managed via --formula):"
+  if command -v brew >/dev/null 2>&1; then
+    local formula
+    while IFS= read -r formula
+    do
+      [[ -z "$formula" ]] && continue
+      print_package_status "formula" "$formula" "$(brew_formula_current_version "$formula")" "$(brew_formula_target_version "$formula")"
+    done < <(brewfile_brew_names)
+  else
+    echo "  Homebrew is not installed."
+  fi
+
+  echo
+  echo "Homebrew casks (managed via --casks):"
+  if command -v brew >/dev/null 2>&1; then
+    local cask
+    while IFS= read -r cask
+    do
+      [[ -z "$cask" ]] && continue
+      print_package_status "cask" "$cask" "$(brew_cask_current_version "$cask")" "$(brew_cask_target_version "$cask")"
+    done < <(brewfile_cask_names)
+  else
+    echo "  Homebrew is not installed."
+  fi
+
+  echo
+  echo "Global node modules (managed via --node):"
   if load_nvm && nvm use default >/dev/null 2>&1; then
     for package in "${GLOBAL_NPM_PACKAGES[@]}"
     do
@@ -462,30 +558,26 @@ show_info() {
         current="$(npm_package_current_version "$package")"
         target="$(npm_package_target_version "$package")"
       fi
-      if [ -z "$current" ]; then
-        printf "%s %-12s %-30s %s -> %s\n" "$(colorize_action "install")" "npm" "$package" "not installed" "$target"
-      else
-        printf "%s %-12s %-30s %s -> %s\n" "$(colorize_action "current")" "npm" "$package" "$current" "$target"
-      fi
+      print_package_status "npm" "$package" "$current" "$target"
     done
   else
-    echo "  Skipping npm package preview because the NVM default Node runtime is not active."
+    echo "  Skipping node module preview because the NVM default Node runtime is not active."
   fi
 
   echo
-  echo "Global python packages:"
+  echo "Global python packages (managed via --python):"
   if command -v uv >/dev/null 2>&1; then
     for entry in "${GLOBAL_PYTHON_PACKAGES[@]}"
     do
       local current=""
       local target="unknown"
+      local no_compare="false"
       current="$(uv_package_current_version "$entry")"
       target="$(uv_package_target_version "$entry")"
-      if [ -z "$current" ]; then
-        printf "%s %-12s %-30s %s -> %s\n" "$(colorize_action "install")" "python" "$(uv_tool_name "$entry")" "not installed" "$target"
-      else
-        printf "%s %-12s %-30s %s -> %s\n" "$(colorize_action "current")" "python" "$(uv_tool_name "$entry")" "$current" "$target"
+      if [ -n "$(uv_tool_source "$entry")" ]; then
+        no_compare="true"
       fi
+      print_package_status "python" "$(uv_tool_name "$entry")" "$current" "$target" "$no_compare"
     done
   else
     echo "  Skipping python package preview because uv is not available."
@@ -494,8 +586,8 @@ show_info() {
   echo
   echo "Post-install follow-ups after any install action:"
   echo "  - Run all scripts in \$HOME/.dotfiles/post-install"
-  echo "  - Load NVM and update global npm packages: ${GLOBAL_NPM_PACKAGES[*]}"
-  echo "  - Update global python packages: ${GLOBAL_PYTHON_PACKAGES[*]}"
+  echo "  - Global node modules (--node): ${GLOBAL_NPM_PACKAGES[*]}"
+  echo "  - Global python packages (--python): ${GLOBAL_PYTHON_PACKAGES[*]}"
 }
 
 run_formulae() {
