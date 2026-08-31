@@ -447,10 +447,13 @@ print_package_status() {
   local current="$3"
   local target="$4"
   local no_compare="${5:-false}"
+  local override="${6:-}"
   local action="current"
 
   if [ -z "$current" ]; then
     action="install"
+  elif [ -n "$override" ]; then
+    action="$override"
   elif [ "$no_compare" = false ] && [ -n "$target" ] && [ "$target" != "unknown" ] && [ "$target" != "git-latest" ] && [ "$current" != "$target" ]; then
     action="upgrade"
   fi
@@ -460,6 +463,12 @@ print_package_status() {
   else
     printf "%s %-12s %-30s %s -> %s\n" "$(colorize_action "$action")" "$kind" "$name" "${current:-not installed}" "$target"
   fi
+}
+
+# Short cask tokens that Homebrew considers outdated (excludes auto_updates casks,
+# which self-manage their versions, unless --greedy is used).
+brew_outdated_cask_tokens() {
+  brew outdated --cask 2>/dev/null | awk '{print $1}'
 }
 
 show_info() {
@@ -539,11 +548,24 @@ show_info() {
   echo
   echo "Homebrew casks (managed via --casks):"
   if command -v brew >/dev/null 2>&1; then
+    local outdated_tokens
+    outdated_tokens="$(brew_outdated_cask_tokens)"
     local cask
+    local short_cask
+    local override
     while IFS= read -r cask
     do
       [[ -z "$cask" ]] && continue
-      print_package_status "cask" "$cask" "$(brew_cask_current_version "$cask")" "$(brew_cask_target_version "$cask")"
+      short_cask="${cask##*/}"
+      override=""
+      if [ -n "$(brew_cask_current_version "$cask")" ]; then
+        if grep -qx "$short_cask" <<< "$outdated_tokens"; then
+          override="upgrade"
+        else
+          override="current"
+        fi
+      fi
+      print_package_status "cask" "$cask" "$(brew_cask_current_version "$cask")" "$(brew_cask_target_version "$cask")" "false" "$override"
     done < <(brewfile_cask_names)
   else
     echo "  Homebrew is not installed."
