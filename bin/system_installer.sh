@@ -483,11 +483,13 @@ show_info() {
 }
 
 run_formulae() {
-  brew bundle --file="$BREWFILE" --no-cask
+  # Homebrew 6.x `bundle install` dropped --no-cask/--no-formula, so filter the
+  # Brewfile (formulae + taps only) and install from a filtered stream.
+  grep -vE '^[[:space:]]*cask ' "$BREWFILE" | brew bundle install --file=-
 }
 
 run_casks() {
-  brew bundle --file="$BREWFILE" --no-formula
+  grep -E '^[[:space:]]*cask ' "$BREWFILE" | brew bundle install --file=-
 }
 
 run_uninstall() {
