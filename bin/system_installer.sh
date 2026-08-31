@@ -425,7 +425,9 @@ brew_formula_target_version() {
 
 brew_cask_current_version() {
   local cask="$1"
-  brew list --cask --versions "$cask" 2>/dev/null | awk '{print $2}'
+  # `brew list --cask --versions` does not accept a fully-qualified <tap>/<cask>
+  # name, so strip any tap prefix and query by the short cask name.
+  brew list --cask --versions "${cask##*/}" 2>/dev/null | awk '{print $2}'
 }
 
 brew_cask_target_version() {
