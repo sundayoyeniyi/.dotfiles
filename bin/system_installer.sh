@@ -66,21 +66,23 @@ Flags:
   --formula    Install or upgrade Homebrew formulae from Brewfile.
   --casks      Install or upgrade Homebrew casks from Brewfile.
   --python     Install or upgrade the configured global python packages (GLOBAL_PYTHON_PACKAGES).
+  --node       Install or upgrade the configured global node modules (GLOBAL_NPM_PACKAGES).
   --info       Show planned installs, upgrades, and removals.
   --uninstall  Remove everything marked for removal (REMOVED_FORMULAE, REMOVED_CASKS, REMOVED_PYTHON_PACKAGES, REMOVED_NPM_PACKAGES).
-  --all        Run formulae, casks, uninstall, post-install steps, and global npm/python package updates.
+  --all        Run formulae, casks, uninstall, post-install steps, and global node/python package updates.
   --help       Show this help message.
   --post       Run only the post-install scripts.
 
 Notes:
   - If no flag is provided, the script prints this help message.
-  - You can combine: --formula, --casks, --python, and --uninstall.
+  - You can combine: --formula, --casks, --python, --node, and --uninstall.
   - --all, --info, and --post are standalone modes.
   - Packages are managed via Brewfile at the repo root. Edit Brewfile to add/remove packages.
   - To mark a brew formula/cask for removal, move it into REMOVED_FORMULAE or REMOVED_CASKS in this script.
   - To remove a python package, move it from GLOBAL_PYTHON_PACKAGES to REMOVED_PYTHON_PACKAGES in this script.
   - To remove a global npm package, move it from GLOBAL_NPM_PACKAGES to REMOVED_NPM_PACKAGES in this script.
-  - Post-install scripts and NVM-backed global npm/python package updates run automatically after any install action.
+  - Post-install scripts run automatically after any install action.
+  - Global npm/python package updates run only when explicitly requested via --node/--python.
 EOF
 }
 
@@ -533,15 +535,26 @@ run_uninstall() {
 }
 
 run_install_followups() {
+  local run_node="$1"
+  local run_python="$2"
+
   run_post_install
-  manage_global_npm_packages
-  manage_global_uv_packages
+
+  # Global node/python packages are managed only when explicitly requested
+  # via --node / --python (or --all, which enables both).
+  if [ "$run_node" = true ]; then
+    manage_global_npm_packages
+  fi
+  if [ "$run_python" = true ]; then
+    manage_global_uv_packages
+  fi
 }
 
 main() {
   local run_formula_flag=false
   local run_cask_flag=false
   local run_python_flag=false
+  local run_node_flag=false
   local run_uninstall_flag=false
   local run_post_flag=false
   local run_info_flag=false
@@ -565,6 +578,9 @@ main() {
       --python)
         run_python_flag=true
         ;;
+      --node)
+        run_node_flag=true
+        ;;
       --uninstall)
         run_uninstall_flag=true
         ;;
@@ -579,6 +595,7 @@ main() {
         run_formula_flag=true
         run_cask_flag=true
         run_python_flag=true
+        run_node_flag=true
         run_uninstall_flag=true
         ;;
       --help)
@@ -619,10 +636,17 @@ main() {
     exit 0
   fi
 
-  # --python alone does not need Homebrew; handle it before the Homebrew setup.
-  if [ "$run_python_flag" = true ] && [ "$run_formula_flag" = false ] && [ "$run_cask_flag" = false ] && [ "$run_uninstall_flag" = false ]; then
-    manage_global_uv_packages
-    exit 0
+  # --node/--python alone do not need Homebrew; handle them before the Homebrew setup.
+  if [ "$run_formula_flag" = false ] && [ "$run_cask_flag" = false ] && [ "$run_uninstall_flag" = false ]; then
+    if [ "$run_node_flag" = true ]; then
+      manage_global_npm_packages
+    fi
+    if [ "$run_python_flag" = true ]; then
+      manage_global_uv_packages
+    fi
+    if [ "$run_node_flag" = true ] || [ "$run_python_flag" = true ]; then
+      exit 0
+    fi
   fi
 
   ensure_homebrew
@@ -642,8 +666,8 @@ main() {
 
   finalize_homebrew
 
-  if [ "$run_formula_flag" = true ] || [ "$run_cask_flag" = true ] || [ "$run_python_flag" = true ]; then
-    run_install_followups
+  if [ "$run_formula_flag" = true ] || [ "$run_cask_flag" = true ] || [ "$run_uninstall_flag" = true ]; then
+    run_install_followups "$run_node_flag" "$run_python_flag"
   fi
 }
 
