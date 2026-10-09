@@ -6,27 +6,19 @@ BREWFILE="${ZSH:-$HOME/.dotfiles}/Brewfile"
 
 REMOVED_FORMULAE=(
   node
-  osv-scanner
 )
 
 REMOVED_CASKS=(
-  apache-directory-studio
-  chatgpt-atlas
-  codex-app
-  corretto@17
-  corretto@21
-  dash
-  evernote
+  codex
 )
 
 GLOBAL_NPM_PACKAGES=(
-
+  "@fission-ai/openspec"
 )
 
 # To remove a global npm package, move its entry from GLOBAL_NPM_PACKAGES to here.
 REMOVED_NPM_PACKAGES=(
-  @openai/codex
-  @github/copilot
+
 )
 
 GLOBAL_PYTHON_PACKAGES=(
@@ -80,7 +72,7 @@ Notes:
   - Packages are managed via Brewfile at the repo root. Edit Brewfile to add/remove packages.
   - To mark a brew formula/cask for removal, move it into REMOVED_FORMULAE or REMOVED_CASKS in this script.
   - To remove a python package, move it from GLOBAL_PYTHON_PACKAGES to REMOVED_PYTHON_PACKAGES in this script.
-  - To remove a global npm package, move it from GLOBAL_NPM_PACKAGES to REMOVED_NPM_PACKAGES in this script.
+  - To remove a global npm package from every installed NVM Node version, move it from GLOBAL_NPM_PACKAGES to REMOVED_NPM_PACKAGES in this script.
   - Post-install scripts run automatically after any install action.
   - Global npm/python package updates run only when explicitly requested via --node/--python.
 EOF
@@ -160,26 +152,39 @@ remove_cask() {
 
 remove_npm_package() {
   local package="$1"
+  local node_version="$2"
 
-  if npm list -g --depth=0 "$package" >/dev/null 2>&1; then
-    echo "Removing global npm package: $package"
-    npm uninstall -g "$package"
+  if nvm exec "$node_version" npm list -g --depth=0 "$package" >/dev/null 2>&1; then
+    echo "Removing global npm package: $package (Node $node_version)"
+    nvm exec "$node_version" npm uninstall -g "$package"
   else
-    echo "npm package $package not installed and can't be removed"
+    echo "npm package $package not installed under Node $node_version"
   fi
 }
 
 remove_marked_npm_packages() {
-  local package
+  local package node_dir node_version
+  local -a node_dirs
 
   if (( ${#REMOVED_NPM_PACKAGES[@]} == 0 )); then
     return 0
   fi
 
-  echo "> Removing deprecated global npm packages"
+  setopt local_options null_glob
+  node_dirs=("$NVM_DIR"/versions/node/*(/))
+  if (( ${#node_dirs[@]} == 0 )); then
+    echo "No NVM-managed Node versions found; cannot remove marked global npm packages."
+    return 0
+  fi
+
+  echo "> Removing deprecated global npm packages from all installed NVM Node versions"
   for package in "${REMOVED_NPM_PACKAGES[@]}"
   do
-    remove_npm_package "$package"
+    for node_dir in "${node_dirs[@]}"
+    do
+      node_version="${node_dir:t}"
+      remove_npm_package "$package" "$node_version"
+    done
   done
 }
 
@@ -254,9 +259,15 @@ sync_nvm_default_packages() {
 }
 
 manage_global_npm_packages() {
-  if load_nvm && nvm use default >/dev/null 2>&1; then
-    sync_nvm_default_packages
-    remove_marked_npm_packages
+  if ! load_nvm; then
+    echo "Skipping global npm package management because NVM is not available."
+    return
+  fi
+
+  sync_nvm_default_packages
+  remove_marked_npm_packages
+
+  if nvm use default >/dev/null 2>&1; then
     echo "> Managing global npm packages"
     for package in "${GLOBAL_NPM_PACKAGES[@]}"
     do
@@ -641,11 +652,11 @@ run_uninstall() {
   done
 
   if (( ${#REMOVED_NPM_PACKAGES[@]} > 0 )); then
-    if load_nvm && nvm use default >/dev/null 2>&1; then
-      remove_marked_npm_packages
+    if load_nvm; then
       sync_nvm_default_packages
+      remove_marked_npm_packages
     else
-      echo "Skipping npm package removal because the NVM default Node runtime is not active."
+      echo "Skipping npm package removal because NVM is not available."
     fi
   fi
 }
