@@ -13,6 +13,7 @@ REMOVED_CASKS=(
 )
 
 GLOBAL_NPM_PACKAGES=(
+  "@alibaba-group/open-code-review"
   "@fission-ai/openspec"
 )
 

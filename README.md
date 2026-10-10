@@ -48,6 +48,12 @@ Global Python CLI tools are managed as isolated `uv tool` environments by `GLOBA
 tree-sitter parsers are available without a separate system `pip install`. Run `bin/system_installer.sh --python` to
 install or reconcile those extras; `--all` includes the same step.
 
+Global npm CLIs are managed through `GLOBAL_NPM_PACKAGES` in `bin/system_installer.sh`. Open Code Review is included
+as the `@alibaba-group/open-code-review` package. It requires Git 2.41+ and Node.js 18+. Run
+`bin/system_installer.sh --node` to install/update it, then verify with `ocr version` and
+`ocr delegate preview --help`. Review Pilot uses delegation mode and does not require OCR provider credentials or
+model configuration. The OCR CLI must be v1.9.0+ for Review Pilot's structured JSON integration.
+
 ## Zsh configuration
 
 `.zshrc` is a thin entry point that sources `zsh-config/*.zsh` in order:
